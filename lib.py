@@ -24,7 +24,7 @@ def evaluate_non_zero_basis_splines(x, mu, t, p):
         b = evaluate_non_zero_basis_splines(x, new_mu, t, p)
         return b[:-p]
     else:
-        # No action eneded
+        # No action needed
         b = 1
         for k in range(1, p + 1):
             # extract relevant knots
@@ -37,6 +37,14 @@ def evaluate_non_zero_basis_splines(x, mu, t, p):
         return b
 
 def index(x, t):
+    """
+    Given a knot vector t, find the index mu
+    such that t[mu] <= x < t[mu+1]
+    :param x: Parameter value
+    :param t: knot vector
+    :return: 
+    """
     for i in range(len(t)-1):
         if t[i] <= x < t[i+1]:
             return i
+    return i

@@ -62,7 +62,7 @@ class TestSplineFunction(TestCase):
             A set of coefficients [3, 2, 4]
             A degree p = 1
         When:
-            Evaluating the spline f at 0, 1.5, 3.5,
+            Evaluating the spline f at 0, 1.5, 2.5, 3.5,
         Then:
             f(0) = 0
             f(1.5) = 0.5
@@ -80,3 +80,28 @@ class TestSplineFunction(TestCase):
 
         for e, c in zip(expected_values, computed_values):
             self.assertAlmostEqual(e, c)
+
+    def test_call_end_point(self):
+        """
+        Given:
+        Given:
+            A knot vector [0, 1, 2, 3, 4]
+            A set of coefficients [3, 2, 4]
+            A degree p = 1
+        When:
+            Evaluating the spline f at 4.0, while not defined in theory,
+            we allow it here.
+        Then:
+            f(4.0) = 0 
+        """
+
+        t = [0, 1, 2, 3, 4]
+        c = [3, 2, 4]
+        p = 1
+        f = SplineFunction(degree=p, knots=t, coefficients=c)
+        x = 4
+
+        expected_value = 0.0
+        computed_values = f(x)
+
+        self.assertAlmostEqual(expected_value, computed_values)
