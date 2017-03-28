@@ -51,3 +51,20 @@ def index(x, t):
         if t[i] <= x < t[i+1]:
             return i
     return i
+
+def knot_averages(t, p):
+    """
+    Given a knot vector of length p + n + 1,
+    returns the knot averages. Main use case is
+    the plotting of control polygons, and the
+    variation diminishing spline approximation.
+    :param t: knot vector 
+    :param p: spline degree
+    :return: array of knot averages
+    """
+
+    n = len(t) - p - 1
+    k = np.zeros(n)
+    for i in range(n):
+        k[i] = sum(t[i + 1: i + p + 1]) / float(p)
+    return k

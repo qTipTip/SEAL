@@ -1,6 +1,7 @@
 import numpy as np
 
-from lib import evaluate_non_zero_basis_splines, index
+from lib import evaluate_non_zero_basis_splines, index, knot_averages
+
 
 class RegularKnotVectorException(Exception):
     pass
@@ -48,8 +49,13 @@ class SplineFunction(object):
         return c.shape[1]
 
     def __call__(self, x):
+        """
+        Overides the __call__ operator for the SplineFunction object.
+        :param x: np.ndarray or float
+        :return: f(x)
+        """
         if isinstance(x, (list, set, np.ndarray)):
-            y = np.zeros(len(x))
+            y = np.ndarray(shape=(len(x), self.d))
             for i in range(len(x)):
                 y[i] = self._evaluate_spline(x[i])
             return y
@@ -58,7 +64,7 @@ class SplineFunction(object):
 
     def _evaluate_spline(self, x):
         """
-        Evaluates the spline function at some parameter value x.
+        Evaluates the spline function at some scalar parameter value x.
         Note that x has to lie in the range prescribed by the knot vector, self.t.
         :param x: parameter value
         :return: f(x)
@@ -69,5 +75,21 @@ class SplineFunction(object):
         C = self.c[mu - self.p:mu - self.p + len(B)]
         B = np.reshape(B, (len(B), 1))
 
+        # TODO: Dot product here? More elegant
         result = sum([c * b for c, b in zip(C, B)])
         return result
+
+    def control_polygon(self):
+        """
+        Returns the control polygon of the spline curve.
+        Using knot averages if the curve is a spline function, and
+        the spline coefficients if the curve is parametric.
+        
+        :return: a set of control points determining the control polygon 
+        """
+
+        if self.d == 1:
+            knot_avg = knot_averages(self.t, self.p)
+            return zip(knot_avg, self.c)
+        else:
+            return self.c
