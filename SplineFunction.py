@@ -2,6 +2,8 @@ import numpy as np
 
 from lib import evaluate_non_zero_basis_splines, index
 
+class RegularKnotVectorException(Exception):
+    pass
 
 class SplineFunction(object):
 
@@ -18,6 +20,20 @@ class SplineFunction(object):
         self.d = self._determine_coefficient_space(self.c)
 
         assert len(self.c) == len(self.t) - self.p - 1
+
+    @property
+    def t(self):
+        return self._t
+
+    @t.setter
+    def t(self, t):
+        start = t[0]
+        end = t[-1]
+        print(self.p, t, t[:self.p+1], t[-self.p-1:])
+        if (np.all(start == t[:self.p+1]) and np.all(end == t[-self.p-1:])):
+            self._t = t
+        else:
+            raise RegularKnotVectorException("The first p+1 knots must be equal, and the last p+1 knots must be equal")
 
     def _determine_coefficient_space(self, c):
         """
