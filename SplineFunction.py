@@ -6,8 +6,8 @@ from lib import evaluate_non_zero_basis_splines, index, knot_averages
 class RegularKnotVectorException(Exception):
     pass
 
-class SplineFunction(object):
 
+class SplineFunction(object):
     def __init__(self, degree, knots, coefficients):
         """
         Initialize a spline function
@@ -20,6 +20,7 @@ class SplineFunction(object):
         self.t = np.array(knots, dtype=np.float64)
         self.d = self._determine_coefficient_space(self.c)
 
+        # TODO: Handle this better
         assert len(self.c) == len(self.t) - self.p - 1
 
     @property
@@ -35,7 +36,7 @@ class SplineFunction(object):
         """
         start = t[0]
         end = t[-1]
-        if (np.all(start == t[:self.p+1]) and np.all(end == t[-self.p-1:])):
+        if np.all(start == t[:self.p + 1]) and np.all(end == t[-self.p - 1:]):
             self._t = t
         else:
             raise RegularKnotVectorException("The first p+1 knots must be equal, and the last p+1 knots must be equal")
@@ -69,7 +70,7 @@ class SplineFunction(object):
 
     def _evaluate_spline(self, x):
         """
-        Evaluates the spline function at some scalar parameter value x.
+        Evaluates the spline function at some parameter value x.
         Note that x has to lie in the range prescribed by the knot vector, self.t.
         :param x: parameter value
         :return: f(x)
@@ -96,6 +97,6 @@ class SplineFunction(object):
 
         if self.d == 1:
             knot_avg = knot_averages(self.t, self.p)
-            return zip(knot_avg, self.c)
+            return np.column_stack((knot_avg, self.c))
         else:
             return self.c
