@@ -29,7 +29,6 @@ class SplineFunction(object):
     def t(self, t):
         start = t[0]
         end = t[-1]
-        print(self.p, t, t[:self.p+1], t[-self.p-1:])
         if (np.all(start == t[:self.p+1]) and np.all(end == t[-self.p-1:])):
             self._t = t
         else:

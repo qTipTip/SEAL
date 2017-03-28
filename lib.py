@@ -10,16 +10,19 @@ def evaluate_non_zero_basis_splines(x, mu, t, p):
    :param p: spline degree
    :return: vector b of at most p + 1 non-zero splines evaluated at x
     """
+
+    # TODO: Now that p+1 regularity is enforced, we might not need to check
+    # these cases.
     n = len(t) - p - 1
     if mu - p < 0:
         # Too few knots at start of knot vector
-        t = np.insert(t, 0, [t[0] - 1]*(p))
+        t = np.insert(t, 0, [t[0] - 1]*(p+1))
         new_mu = index(x, t)
         b = evaluate_non_zero_basis_splines(x, new_mu, t, p)
         return b[p:]
     elif mu > n-1:
         # Too few knots at end of knot vector
-        t = np.append(t, [t[-1] + 1] * (p))
+        t = np.append(t, [t[-1] + 1] * (p+1))
         new_mu = index(x, t)
         b = evaluate_non_zero_basis_splines(x, new_mu, t, p)
         return b[:-p]
