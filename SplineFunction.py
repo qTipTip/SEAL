@@ -1,5 +1,7 @@
 import numpy as np
 
+from lib import evaluate_non_zero_basis_splines, index
+
 
 class SplineFunction(object):
 
@@ -27,3 +29,19 @@ class SplineFunction(object):
             self.c = c.reshape(len(c), 1)
             return 1
         return c.shape[1]
+
+    def __call__(self, x):
+        """
+        Evaluates the spline function at some parameter value x.
+        Note that x has to lie in the range prescribed by the knot vector, self.t.
+        :param x: parameter value
+        :return: f(x)
+        """
+        mu = index(x, self.t)
+        B = evaluate_non_zero_basis_splines(x, mu, self.t, self.p)
+        C = self.c[mu-self.p:mu - self.p + len(B)]
+        B = np.reshape(B, (len(B), 1))
+        result = 0
+        for c, b in zip(C, B):
+            result += c * b
+        return result
