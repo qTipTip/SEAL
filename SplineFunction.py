@@ -28,6 +28,11 @@ class SplineFunction(object):
 
     @t.setter
     def t(self, t):
+        """
+        Verifies that the knot vector is p+1 regular. 
+        :param t: knot vector
+        :raises: RegularKnotVectorException
+        """
         start = t[0]
         end = t[-1]
         if (np.all(start == t[:self.p+1]) and np.all(end == t[-self.p-1:])):
@@ -78,6 +83,7 @@ class SplineFunction(object):
         # TODO: Dot product here? More elegant
         result = sum([c * b for c, b in zip(C, B)])
         return result
+
     @property
     def control_polygon(self):
         """
