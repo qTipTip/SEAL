@@ -1,7 +1,8 @@
 from unittest import TestCase
 
-from lib import evaluate_non_zero_basis_splines
 import numpy as np
+
+from SEAL.lib import evaluate_non_zero_basis_splines
 
 class TestEvaluate_non_zero_basis_splines(TestCase):
     def test_evaluate_non_zero_basis_splines_regular_vector(self):

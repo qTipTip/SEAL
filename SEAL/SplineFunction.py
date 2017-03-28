@@ -1,6 +1,6 @@
 import numpy as np
 
-from lib import evaluate_non_zero_basis_splines, index, knot_averages
+from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages
 
 
 class RegularKnotVectorException(Exception):

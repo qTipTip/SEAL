@@ -1,5 +1,7 @@
-from SplineFunction import SplineFunction
 import numpy as np
+
+from SEAL.SplineFunction import SplineFunction
+
 
 class SplineSpace(object):
     """

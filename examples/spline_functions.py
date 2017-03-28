@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
-from SplineSpace import SplineSpace
+from SEAL.SplineSpace import SplineSpace
 
 p = 2
 t = [0, 0, 0, 1, 2, 3, 4, 4, 4]
