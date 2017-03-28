@@ -17,6 +17,8 @@ class SplineFunction(object):
         self.t = np.array(knots, dtype=np.float64)
         self.d = self._determine_coefficient_space(self.c)
 
+        assert len(self.c) == len(self.t) - self.p - 1
+
     def _determine_coefficient_space(self, c):
         """
         Determines the coefficient space.
@@ -31,17 +33,26 @@ class SplineFunction(object):
         return c.shape[1]
 
     def __call__(self, x):
+        if isinstance(x, (list, set, np.ndarray)):
+            y = np.zeros(len(x))
+            for i in range(len(x)):
+                y[i] = self._evaluate_spline(x[i])
+            return y
+        else:
+            return self._evaluate_spline(x)
+
+    def _evaluate_spline(self, x):
         """
         Evaluates the spline function at some parameter value x.
         Note that x has to lie in the range prescribed by the knot vector, self.t.
         :param x: parameter value
         :return: f(x)
         """
+
         mu = index(x, self.t)
         B = evaluate_non_zero_basis_splines(x, mu, self.t, self.p)
-        C = self.c[mu-self.p:mu - self.p + len(B)]
+        C = self.c[mu - self.p:mu - self.p + len(B)]
         B = np.reshape(B, (len(B), 1))
-        result = 0
-        for c, b in zip(C, B):
-            result += c * b
+
+        result = sum([c * b for c, b in zip(C, B)])
         return result
