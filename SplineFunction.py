@@ -78,7 +78,7 @@ class SplineFunction(object):
         # TODO: Dot product here? More elegant
         result = sum([c * b for c, b in zip(C, B)])
         return result
-
+    @property
     def control_polygon(self):
         """
         Returns the control polygon of the spline curve.
