@@ -18,11 +18,11 @@ class TestSplineFunction(TestCase):
             3-tuples      --> 3 D
         """
 
-        c_one = [3, 5, 2]
-        c_two = [(3, 0), (5, 1), (2, 3)]
-        c_three = [(1, 0, 0), (0, 0, 1), (0, 1, 0)]
+        c_one = [0, 0, 0, 3, 5, 2, 0, 0, 0]
+        c_two = [(0, 0), (0, 0), (0, 0), (3, 0), (5, 1), (2, 3), (0, 0), (0, 0), (0, 0)]
+        c_three = [(0, 0, 0), (0, 0, 0), (0, 0, 0), (1, 0, 0), (0, 0, 1), (0, 1, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)]
         p = 3
-        t = [0, 1, 2, 3, 4, 5, 6]
+        t = [0,0,0,0, 1, 2, 3, 4, 5, 6, 6, 6, 6]
 
         expected_dimensions = [1, 2, 3]
         for expected_d, c in zip(expected_dimensions, [c_one, c_two, c_three]):
@@ -46,20 +46,22 @@ class TestSplineFunction(TestCase):
             f(3.5) = 2
         """
 
-        t = [0, 1, 2, 3, 4]
-        c = [3, 2, 4]
+        t = [0, 0, 1, 2, 3, 4, 4]
+        c = [0, 3, 2, 4, 0]
         p = 1
         f = SplineFunction(degree=p, knots=t, coefficients=c)
 
         expected_values = [0, 2.5]
         computed_values = [f(x) for x in [0, 1.5]]
-        np.testing.assert_array_almost_equal(expected_values, computed_values)
+
+        for e, c in zip(expected_values, computed_values):
+            self.assertAlmostEqual(e, c)
 
     def test_call_two(self):
         """
         Given:
-            A knot vector [0, 1, 2, 3, 4]
-            A set of coefficients [3, 2, 4]
+            A knot vector [0, 0, 1, 2, 3, 4, 4]
+            A set of coefficients [0, 3, 2, 4, 0]
             A degree p = 1
         When:
             Evaluating the spline f at 0, 1.5, 2.5, 3.5,
@@ -70,8 +72,8 @@ class TestSplineFunction(TestCase):
             f(3.5) = 2
         """
 
-        t = [0, 1, 2, 3, 4]
-        c = [3, 2, 4]
+        t = [0, 0, 1, 2, 3, 4, 4]
+        c = [0, 3, 2, 4, 0]
         p = 1
         f = SplineFunction(degree=p, knots=t, coefficients=c)
 
@@ -85,8 +87,8 @@ class TestSplineFunction(TestCase):
         """
         Given:
         Given:
-            A knot vector [0, 1, 2, 3, 4]
-            A set of coefficients [3, 2, 4]
+            A knot vector [0, 0, 1, 2, 3, 4, 4]
+            A set of coefficients [0, 3, 2, 4, 0]
             A degree p = 1
         When:
             Evaluating the spline f at 4.0, while not defined in theory,
@@ -95,13 +97,49 @@ class TestSplineFunction(TestCase):
             f(4.0) = 0 
         """
 
-        t = [0, 1, 2, 3, 4]
-        c = [3, 2, 4]
+        t = [0, 0, 1, 2, 3, 4, 4]
+        c = [0, 3, 2, 4, 0]
         p = 1
         f = SplineFunction(degree=p, knots=t, coefficients=c)
         x = 4
 
         expected_value = 0.0
-        computed_values = f(x)
+        computed_values = float(f(x))
 
         self.assertAlmostEqual(expected_value, computed_values)
+
+    def test_basis_spline(self):
+        """
+        Given:
+            A knot vector [0, 0, 0, 1, 2, 3, 4, 5, 5, 5]
+            A set of coefficients [0, 0, 1, 0, 0]
+            A degree p = 2
+        When:
+            Evaluating the second basis spline over the range [0, 5]
+        Then:
+            B(x) = as expected_func below
+        """
+
+        def expected_func(x):
+
+            if 1 <= x <= 2:
+                return (x - 1)**2/ 2.0
+            elif 2 <= x < 3:
+                return (x - 1)*(3-x) / 2.0 + (4 - x)*(x-2)/2.0
+            elif 3 <= x < 4:
+                return (4-x)**2 / 2.0
+            else:
+                return 0.0
+
+        t = [0, 0, 0, 1, 2, 3, 4, 5, 5, 5]
+        p = 2
+        c = [0, 0, 0, 1, 0, 0, 0]
+        f = SplineFunction(p, t, c)
+
+        x_values = np.linspace(t[0], t[-1], 100)
+
+        y_computed = f(x_values)
+        y_expected = [expected_func(x) for x in x_values]
+
+        for e, c in zip(y_expected, y_computed):
+            self.assertAlmostEqual(e, c)
