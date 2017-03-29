@@ -68,3 +68,21 @@ def knot_averages(t, p):
     for i in range(n):
         k[i] = sum(t[i + 1: i + p + 1]) / float(p)
     return k
+
+
+def create_knots(a, b, p, n):
+    """
+    Returns a p+1 regular knot vector starting at a and ending at b
+    with a total length of n + p + 1. A spline space on such a knot vector will have n
+    basis splines.
+    :param a: float, start
+    :param b: float, end
+    :param p: int, spline degree
+    :param n: int, number of basis splines
+    :return: np.ndarray, p+1 regular knot vector
+    """
+
+    interior_knots = np.linspace(a, b, num=n - p + 1)
+    regular_knots = np.lib.pad(interior_knots, (p, p), mode='edge')
+
+    return regular_knots
