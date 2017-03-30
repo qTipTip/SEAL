@@ -3,7 +3,7 @@ from unittest import TestCase
 from SEAL.lib import create_knots
 
 
-class TestKnot_factory(TestCase):
+class TestKnotFactory(TestCase):
     def test_create_knots(self):
         """
         Given:

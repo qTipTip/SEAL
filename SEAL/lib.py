@@ -69,7 +69,6 @@ def knot_averages(t, p):
         k[i] = sum(t[i + 1: i + p + 1]) / float(p)
     return k
 
-
 def create_knots(a, b, p, n):
     """
     Returns a p+1 regular knot vector starting at a and ending at b
@@ -86,3 +85,14 @@ def create_knots(a, b, p, n):
     regular_knots = np.lib.pad(interior_knots, (p, p), mode='edge')
 
     return regular_knots
+
+
+def create_interpolation_knots(x_values):
+    """
+    Constructs the 2-regular knot vector given
+    the m data points in :x_values:.
+    :param x_values: np.ndarray, m data values
+    :return: np.ndarray, 2-regular knot vector
+    """
+
+    return np.lib.pad(x_values, pad_width=(1, 1), mode='edge')
