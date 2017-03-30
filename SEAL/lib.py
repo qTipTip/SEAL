@@ -106,3 +106,16 @@ def create_interpolation_knots(x_values, interpol_type='linear'):
         # pad with two values at each end
         x_values = np.lib.pad(x_values, (2, 2), mode='edge')
         return x_values
+
+
+def create_cubic_hermite_coefficients(data_values):
+    m, _ = data_values.shape
+    x, f, df = data_values.T
+
+    x = np.lib.pad(x, (1, 1), 'edge')
+    cubic_hermite_coefficients = np.zeros(2 * m)
+
+    for i in range(m):
+        cubic_hermite_coefficients[2 * i] = f[i] - (1.0 / 3.0) * (x[i + 1] - x[i]) * df[i]
+        cubic_hermite_coefficients[2 * i + 1] = f[i] + (1.0 / 3.0) * (x[i + 2] - x[i + 1]) * df[i]
+    return cubic_hermite_coefficients

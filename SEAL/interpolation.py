@@ -1,5 +1,5 @@
 from SEAL.SplineFunction import SplineFunction
-from SEAL.lib import create_interpolation_knots
+from SEAL.lib import create_interpolation_knots, create_cubic_hermite_coefficients
 
 
 def linear_spline_interpolation(data_values):
@@ -26,5 +26,11 @@ def cubic_hermite_interpolation(data_values):
     :return: SplineFunction of degree 3 representing the linear spline interpolant to the data. 
     """
 
+    m, _ = data_values.shape
+    p = 3
+
     x_values, f_values, df_values = data_values.T
     cubic_hermite_knots = create_interpolation_knots(x_values, interpol_type='cubic')
+    cubic_hermite_coeff = create_cubic_hermite_coefficients(data_values)
+
+    return SplineFunction(p, cubic_hermite_knots, cubic_hermite_coeff)
