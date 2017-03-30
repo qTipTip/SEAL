@@ -119,3 +119,28 @@ def create_cubic_hermite_coefficients(data_values):
         cubic_hermite_coefficients[2 * i] = f[i] - (1.0 / 3.0) * (x[i + 1] - x[i]) * df[i]
         cubic_hermite_coefficients[2 * i + 1] = f[i] + (1.0 / 3.0) * (x[i + 2] - x[i + 1]) * df[i]
     return cubic_hermite_coefficients
+
+
+def approximate_derivatives(x_values, f_values):
+    """
+    Approximate the derivatives in each point using interpolating parabolas.
+    :param x_values: ndarray of shape (m, )
+    :param f_values: ndarray of shape (m, )
+    :return: ndarray of length m, df_values
+    """
+
+    m = len(x_values)
+    df_values = np.zeros(m)
+
+    # pad values for end points
+    x_values = np.lib.pad(x_values, pad_width=(1, 1), mode='constant', constant_values=(x_values[2], x_values[m-3]))
+    f_values = np.lib.pad(f_values, pad_width=(1, 1), mode='constant', constant_values=(f_values[2], f_values[m-3]))
+
+    x_differences = x_values[1:] - x_values[:-1]
+    f_differences = f_values[1:] - x_values[:-1]
+    delta_values = np.divide(f_differences, x_differences, where=(x_differences != 0))
+
+    for i in range(0, m):
+        df_values[i] = x_differences[i] * delta_values[i+1] + x_differences[i+1] * delta_values[i] / \
+            (x_differences[i] + x_differences[i+1])
+    return df_values
