@@ -14,4 +14,5 @@ SEAL currently supports:
 1. Scalar Spline Functions;
 2. Parametric Spline Functions in arbitrary dimensions (Euclidean space of dimension d);
 3. Retrieving the control polygon of a SplineFunction for ease of plotting.
-4. Compute the Variation Diminishing Spline Approximation of a scalar / parametric function. 
+4. Compute the Variation Diminishing Spline Approximation of a scalar / parametric function.
+5. Finding the cubic hermite spline interpolant to a set of data points, with derivatives supplied.
