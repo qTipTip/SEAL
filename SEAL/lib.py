@@ -89,12 +89,20 @@ def create_knots(a, b, p, n):
     return regular_knots
 
 
-def create_interpolation_knots(x_values):
+def create_interpolation_knots(x_values, interpol_type='linear'):
     """
-    Constructs the 2-regular knot vector given
-    the m data points in :x_values:.
+    Constructs a suitable knot vector for use in interpolation.
+    Interpol_type = linear --> 2-regular knot vector
+    Interpol_type = cubic --> 4-regular knot vector with double interior knots
     :param x_values: np.ndarray, m data values
-    :return: np.ndarray, 2-regular knot vector
+    :param interpol_type: linear/cubic
+    :return: np.ndarray
     """
-
-    return np.lib.pad(x_values, pad_width=(1, 1), mode='edge')
+    if interpol_type == 'linear':
+        return np.lib.pad(x_values, pad_width=(1, 1), mode='edge')
+    elif interpol_type == 'cubic':
+        # double all knots
+        x_values = np.repeat(x_values, 2)
+        # pad with two values at each end
+        x_values = np.lib.pad(x_values, (2, 2), mode='edge')
+        return x_values
