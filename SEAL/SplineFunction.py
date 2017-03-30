@@ -56,7 +56,7 @@ class SplineFunction(object):
 
     def __call__(self, x):
         """
-        Overides the __call__ operator for the SplineFunction object.
+        Overrides the __call__ operator for the SplineFunction object.
         :param x: np.ndarray or float
         :return: f(x)
         """

@@ -79,5 +79,5 @@ class SplineSpace(object):
         :return: the variation diminishing spline approximation to f
         """
 
-        VDSA_coefficients = [f(tau) for tau in knot_averages(self.t, self.p)]
-        return SplineFunction(self.p, self.t, VDSA_coefficients)
+        vdsa_coefficients = [f(tau) for tau in knot_averages(self.t, self.p)]
+        return SplineFunction(self.p, self.t, vdsa_coefficients)

@@ -39,6 +39,7 @@ def evaluate_non_zero_basis_splines(x, mu, t, p):
 
         return b
 
+
 def index(x, t):
     """
     Given a knot vector t, find the index mu
@@ -51,6 +52,7 @@ def index(x, t):
         if t[i] <= x < t[i+1]:
             return i
     return i
+
 
 def knot_averages(t, p):
     """
