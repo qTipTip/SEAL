@@ -1,6 +1,6 @@
 # SEAL: SplinE Algorithm Library
 
-![](images/seal_spline.pdf)
+![A Seal!](images/seal_spline.pdf)
 
 ### Introduction
 
