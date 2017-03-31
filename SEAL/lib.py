@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def evaluate_non_zero_basis_splines(x, mu, t, p):
     """
    Evaluates the non-zero basis splines of degree p at the point x.
@@ -16,13 +17,13 @@ def evaluate_non_zero_basis_splines(x, mu, t, p):
     n = len(t) - p - 1
     if mu - p < 0:
         # Too few knots at start of knot vector
-        t = np.insert(t, 0, [t[0] - 1]*(p+1))
+        t = np.insert(t, 0, [t[0] - 1] * (p + 1))
         new_mu = index(x, t)
         b = evaluate_non_zero_basis_splines(x, new_mu, t, p)
         return b[p:]
-    elif mu > n-1:
+    elif mu > n - 1:
         # Too few knots at end of knot vector
-        t = np.append(t, [t[-1] + 1] * (p+1))
+        t = np.append(t, [t[-1] + 1] * (p + 1))
         new_mu = index(x, t)
         b = evaluate_non_zero_basis_splines(x, new_mu, t, p)
         return b[:-p]
@@ -48,8 +49,8 @@ def index(x, t):
     :param t: knot vector
     :return: 
     """
-    for i in range(len(t)-1):
-        if t[i] <= x < t[i+1]:
+    for i in range(len(t) - 1):
+        if t[i] <= x < t[i + 1]:
             return i
     return i
 
@@ -70,6 +71,7 @@ def knot_averages(t, p):
     for i in range(n):
         k[i] = sum(t[i + 1: i + p + 1]) / float(p)
     return k
+
 
 def create_knots(a, b, p, n):
     """
@@ -114,7 +116,6 @@ def create_cubic_hermite_coefficients(data_values):
 
     x = np.lib.pad(x, (1, 1), 'edge')
     cubic_hermite_coefficients = np.zeros(2 * m)
-
     for i in range(m):
         cubic_hermite_coefficients[2 * i] = f[i] - (1.0 / 3.0) * (x[i + 1] - x[i]) * df[i]
         cubic_hermite_coefficients[2 * i + 1] = f[i] + (1.0 / 3.0) * (x[i + 2] - x[i + 1]) * df[i]
@@ -133,14 +134,14 @@ def approximate_derivatives(x_values, f_values):
     df_values = np.zeros(m)
 
     # pad values for end points
-    x_values = np.lib.pad(x_values, pad_width=(1, 1), mode='constant', constant_values=(x_values[2], x_values[m-3]))
-    f_values = np.lib.pad(f_values, pad_width=(1, 1), mode='constant', constant_values=(f_values[2], f_values[m-3]))
+    x_values = np.lib.pad(x_values, pad_width=(1, 1), mode='constant', constant_values=(x_values[2], x_values[m - 3]))
+    f_values = np.lib.pad(f_values, pad_width=(1, 1), mode='constant', constant_values=(f_values[2], f_values[m - 3]))
 
     x_differences = x_values[1:] - x_values[:-1]
-    f_differences = f_values[1:] - x_values[:-1]
-    delta_values = np.divide(f_differences, x_differences, where=(x_differences != 0))
+    f_differences = f_values[1:] - f_values[:-1]
+    delta_values = np.divide(f_differences, x_differences)
 
     for i in range(0, m):
-        df_values[i] = x_differences[i] * delta_values[i+1] + x_differences[i+1] * delta_values[i] / \
-            (x_differences[i] + x_differences[i+1])
+        df_values[i] = (x_differences[i] * delta_values[i + 1] + x_differences[i + 1] * delta_values[i]) / (
+            x_differences[i] + x_differences[i + 1])
     return df_values

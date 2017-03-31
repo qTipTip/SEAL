@@ -23,7 +23,7 @@ class TestSplineFunction(TestCase):
         c_two = [(0, 0), (0, 0), (0, 0), (3, 0), (5, 1), (2, 3), (0, 0), (0, 0), (0, 0)]
         c_three = [(0, 0, 0), (0, 0, 0), (0, 0, 0), (1, 0, 0), (0, 0, 1), (0, 1, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)]
         p = 3
-        t = [0,0,0,0, 1, 2, 3, 4, 5, 6, 6, 6, 6]
+        t = [0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 6, 6, 6]
 
         expected_dimensions = [1, 2, 3]
         for expected_d, c in zip(expected_dimensions, [c_one, c_two, c_three]):
@@ -124,11 +124,11 @@ class TestSplineFunction(TestCase):
         def expected_func(x):
 
             if 1 <= x <= 2:
-                return (x - 1)**2/ 2.0
+                return (x - 1) ** 2 / 2.0
             elif 2 <= x < 3:
-                return (x - 1)*(3-x) / 2.0 + (4 - x)*(x-2)/2.0
+                return (x - 1) * (3 - x) / 2.0 + (4 - x) * (x - 2) / 2.0
             elif 3 <= x < 4:
-                return (4-x)**2 / 2.0
+                return (4 - x) ** 2 / 2.0
             else:
                 return 0.0
 

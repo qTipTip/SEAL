@@ -4,6 +4,7 @@ import numpy as np
 
 from SEAL.lib import evaluate_non_zero_basis_splines
 
+
 class TestEvaluate_non_zero_basis_splines(TestCase):
     def test_evaluate_non_zero_basis_splines_regular_vector(self):
         """
@@ -21,7 +22,6 @@ class TestEvaluate_non_zero_basis_splines(TestCase):
         t = np.array([0, 0, 1, 2, 2], dtype=np.float64)
         mu = 1
         x = 0
-
 
         expected_values = [1.0, 0.0]
         computed_values = evaluate_non_zero_basis_splines(x, mu, t, p)

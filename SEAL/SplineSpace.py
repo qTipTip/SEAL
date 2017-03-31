@@ -9,6 +9,7 @@ class SplineSpace(object):
     The SplineSpace object functions mostly as a wrapper around the SplineFunction
     objects, providing auxiliary methods, mostly for visualization.
     """
+
     def __init__(self, p, t):
         """
         Initializes a spline space.
@@ -21,7 +22,7 @@ class SplineSpace(object):
         self.n = len(t) - p - 1
 
         # TODO: Handle this properly
-        assert self.n > 0, "The knot vector has to be of at least length p + 2 = {p}".format(p=p+2)
+        assert self.n > 0, "The knot vector has to be of at least length p + 2 = {p}".format(p=p + 2)
 
     def __call__(self, c):
         """
