@@ -1,5 +1,7 @@
 # SEAL: SplinE Algorithm Library
 
+![](images/seal_spline.pdf)
+
 ### Introduction
 
 SEAL is a library for working with spline functions in a quick intuitive way.
