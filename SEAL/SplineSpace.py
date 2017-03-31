@@ -1,7 +1,7 @@
 import numpy as np
 
 from SEAL.SplineFunction import SplineFunction
-from SEAL.approximation import variation_diminishing_spline_approximation
+from SEAL.lib import knot_averages
 
 
 class SplineSpace(object):
@@ -79,5 +79,5 @@ class SplineSpace(object):
         :param f: callable function defined on knot vector
         :return: the variation diminishing spline approximation to f
         """
-
-        return variation_diminishing_spline_approximation(f, self.p, self.t)
+        vdsa_coefficients = [f(tau) for tau in knot_averages(self.t, self.p)]
+        return SplineFunction(self.p, self.t, vdsa_coefficients)
