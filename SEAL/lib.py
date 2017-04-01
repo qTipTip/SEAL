@@ -139,17 +139,25 @@ def approximate_derivatives(x_values, f_values):
     """
 
     m = len(x_values)
-    df_values = np.zeros(m)
 
+    # TODO: Do type checking somewhere else
+    if isinstance(f_values, (list, tuple)):
+        f_values = np.array(f_values).reshape((m, 1))
+    _, k = f_values.shape
+    df_values = np.zeros(shape=(m, k))
     # pad values for end points
     x_values = np.lib.pad(x_values, pad_width=(1, 1), mode='constant', constant_values=(x_values[2], x_values[m - 3]))
-    f_values = np.lib.pad(f_values, pad_width=(1, 1), mode='constant', constant_values=(f_values[2], f_values[m - 3]))
+    # f_values = np.lib.pad(f_values, pad_width=(1, 1), mode='constant', constant_values=(f_values[2], f_values[m - 3]))
 
     x_differences = x_values[1:] - x_values[:-1]
-    f_differences = f_values[1:] - f_values[:-1]
-    delta_values = np.divide(f_differences, x_differences)
 
-    for i in range(0, m):
-        df_values[i] = (x_differences[i] * delta_values[i + 1] + x_differences[i + 1] * delta_values[i]) / (
-            x_differences[i] + x_differences[i + 1])
+    for j in range(k):
+        f_component = f_values[:, j]
+        f_component = np.lib.pad(f_component, pad_width=(1, 1), mode='constant',
+                                 constant_values=(f_component[2], f_component[m - 3]))
+        f_differences = f_component[1:] - f_component[:-1]
+        delta_values = np.divide(f_differences, x_differences)
+        for i in range(0, m):
+            df_values[i, j] = (x_differences[i] * delta_values[i + 1] + x_differences[i + 1] * delta_values[i]) / (
+                x_differences[i] + x_differences[i + 1])
     return df_values
