@@ -1,5 +1,3 @@
-import numpy as np
-
 from SEAL.SplineFunction import SplineFunction
 from SEAL.lib import create_interpolation_knots, create_cubic_hermite_coefficients, approximate_derivatives
 
@@ -20,6 +18,18 @@ def linear_spline_interpolation(data_values):
     return f
 
 
+def cubic_hermite_interpolation(parameter_values, function_values, derivatives=None):
+    cubic_hermite_knots = create_interpolation_knots(parameter_values, interpol_type='cubic')
+    p = 3
+    if not derivatives:
+        derivatives = approximate_derivatives(parameter_values, function_values)
+    cubic_hermite_coeff = create_cubic_hermite_coefficients(parameter_values, function_values, derivatives)
+    print(cubic_hermite_coeff)
+    print(cubic_hermite_knots)
+    return SplineFunction(p, cubic_hermite_knots, cubic_hermite_coeff)
+
+
+'''
 def cubic_hermite_interpolation(data_values):
     """
     Computes the cubic hermite spline interpolation to the given m data points
@@ -43,3 +53,4 @@ def cubic_hermite_interpolation(data_values):
     cubic_hermite_coeff = create_cubic_hermite_coefficients(data_values)
 
     return SplineFunction(p, cubic_hermite_knots, cubic_hermite_coeff)
+'''

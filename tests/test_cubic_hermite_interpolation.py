@@ -21,7 +21,11 @@ class TestCubicHermiteInterpolation(TestCase):
         """
 
         data_values = np.array([(0, 0, 0), (1, 1, 4)])
-        Hf = cubic_hermite_interpolation(data_values)
+        x_values = [0, 1]
+        f_values = [0, 1]
+        df_values = [0, 4]
+
+        Hf = cubic_hermite_interpolation(x_values, f_values, df_values)
 
         x_values = np.linspace(0, 1, num=30)
         expected_values = [2 * x ** 3 - x ** 2 for x in x_values]
