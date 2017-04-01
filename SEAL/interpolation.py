@@ -21,11 +21,10 @@ def linear_spline_interpolation(data_values):
 def cubic_hermite_interpolation(parameter_values, function_values, derivatives=None):
     cubic_hermite_knots = create_interpolation_knots(parameter_values, interpol_type='cubic')
     p = 3
-    if not derivatives:
+    if derivatives is None:
         derivatives = approximate_derivatives(parameter_values, function_values)
+
     cubic_hermite_coeff = create_cubic_hermite_coefficients(parameter_values, function_values, derivatives)
-    print(cubic_hermite_coeff)
-    print(cubic_hermite_knots)
     return SplineFunction(p, cubic_hermite_knots, cubic_hermite_coeff)
 
 
