@@ -111,6 +111,13 @@ def create_interpolation_knots(x_values, interpol_type='linear'):
 
 
 def create_cubic_hermite_coefficients(x, f, df):
+    """
+    Computes the 2m spline coefficients for the cubic hermite spline interpolation.
+    :param x: parameter_values, 1 dimensional array_like
+    :param f: function_values, k-dimensional array_like
+    :param df: derivatives, k-dimensional array_like
+    :return: coefficients, k-dimensional np.ndarray 
+    """
     m = len(x)
     x = np.lib.pad(x, (1, 1), 'edge')
 
