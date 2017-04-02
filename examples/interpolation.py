@@ -9,14 +9,13 @@ df_values = np.cos(x_values)
 
 plt.scatter(x_values, f_values)
 
-data_set_no_df = np.column_stack((x_values, f_values))
-data_set_df = np.column_stack((x_values, f_values, df_values))
+Hf_df = cubic_hermite_interpolation(x_values, f_values, df_values)
+Hf_no_df = cubic_hermite_interpolation(x_values, f_values)
 
 x_values = np.linspace(0, 2 * np.pi, 1000)
-Hf_df = cubic_hermite_interpolation(data_set_df)
-Hf_no_df = cubic_hermite_interpolation(data_set_no_df)
 Hf_no_df_values = Hf_no_df(x_values)
 Hf_df_values = Hf_df(x_values)
+
 f_values = np.sin(x_values)
 plt.plot(x_values, f_values, label='Exact')
 plt.plot(x_values, Hf_df_values, label='With derivatives')

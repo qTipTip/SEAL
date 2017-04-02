@@ -115,7 +115,7 @@ def create_cubic_hermite_coefficients(x, f, df):
     x = np.lib.pad(x, (1, 1), 'edge')
 
     # TODO: Should do type checking somewhere else.
-    if isinstance(f, (list, tuple)):
+    if isinstance(f, (list, tuple)) or f.ndim == 1:
         f = np.array(f).reshape((m, 1))
         df = np.array(df).reshape((m, 1))
 
@@ -141,14 +141,13 @@ def approximate_derivatives(x_values, f_values):
     m = len(x_values)
 
     # TODO: Do type checking somewhere else
-    if isinstance(f_values, (list, tuple)):
+    if isinstance(f_values, (list, tuple)) or f_values.ndim == 1:
         f_values = np.array(f_values).reshape((m, 1))
     _, k = f_values.shape
     df_values = np.zeros(shape=(m, k))
+
     # pad values for end points
     x_values = np.lib.pad(x_values, pad_width=(1, 1), mode='constant', constant_values=(x_values[2], x_values[m - 3]))
-    # f_values = np.lib.pad(f_values, pad_width=(1, 1), mode='constant', constant_values=(f_values[2], f_values[m - 3]))
-
     x_differences = x_values[1:] - x_values[:-1]
 
     for j in range(k):
