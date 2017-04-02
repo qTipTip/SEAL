@@ -39,13 +39,20 @@ class TensorProductSplineFunction(object):
         :return: f(x, y) 
         """
 
-        # single value
+        # array of values
         if isinstance(x, (list, tuple, np.ndarray)) and isinstance(y, (list, tuple, np.ndarray)):
-            f_values = np.zeros(shape=(len(x), len(y)))
+            f_values = np.zeros(shape=(len(x), len(y), self.d))
             for i in range(len(x)):
                 for j in range(len(y)):
-                    f_values[i, j] = self._evaluate_spline(x[i], y[j])
-            return f_values
+                    f_values[i, j] = np.squeeze(self._evaluate_spline(x[i], y[j]))
+
+            if self.d == 1:
+                # scalar surface, then reshape to get rid of last axis of array
+                return np.squeeze(f_values)
+            else:
+                # parametric surface, keep three axes.
+                return f_values
+        # scalar value
         else:
             return self._evaluate_spline(x, y)
 
@@ -73,8 +80,6 @@ class TensorProductSplineFunction(object):
         nx, ny = len(bx), len(by)
         bx = np.reshape(bx, (nx, 1))
         by = np.reshape(by, (ny, 1))
-        # print(np.tensordot(bx.T.dot(coeff),by, 0))
-        print('a', bx.T.shape)
-        # print(coeff.dot(by))
         f = np.dot(bx.T.dot(np.squeeze(coeff)), by)
+
         return f
