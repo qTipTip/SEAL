@@ -93,12 +93,7 @@ class TensorProductSplineFunction(object):
         bx = evaluate_non_zero_basis_splines(x, mu_x, self.t[0], self.p[0])
         by = evaluate_non_zero_basis_splines(y, mu_y, self.t[1], self.p[1])
         coeff = self.c[mu_x - self.p[0]: mu_x + 1, mu_y - self.p[1]: mu_y + 1]
-        # TODO: Do this properly, make sure that SplineFunction does not break,
-        # TODO: if we change the evaluate_non_zero_basis_splines
-        # Have to reshape, to get proper dimensions
         nx, ny = len(bx), len(by)
-        bx = np.reshape(bx, (nx, 1))
-        by = np.reshape(by, (ny, 1))
-        f = np.dot(bx.T.dot(np.squeeze(coeff)), by)
 
+        f = np.einsum('i,ijk,j->k', bx, coeff, by)  # compute the dot product over the first two axes.
         return f
