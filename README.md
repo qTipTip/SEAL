@@ -19,3 +19,4 @@ SEAL currently supports:
 4. Compute the Variation Diminishing Spline Approximation of a scalar / parametric function.
 5. Finding the Cubic Hermite Spline Interpolant to a set of d-dimensional data points, with or without derivatives supplied.
 6. Computing the Least Square Spline Approximation to a set of data points in a given spline space.
+7. TensorProductSplineFunctions, both scalar and parametric.
