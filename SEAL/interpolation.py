@@ -26,30 +26,3 @@ def cubic_hermite_interpolation(parameter_values, function_values, derivatives=N
 
     cubic_hermite_coeff = create_cubic_hermite_coefficients(parameter_values, function_values, derivatives)
     return SplineFunction(p, cubic_hermite_knots, cubic_hermite_coeff)
-
-
-'''
-def cubic_hermite_interpolation(data_values):
-    """
-    Computes the cubic hermite spline interpolation to the given m data points
-    (x_i, f(x_i), f'(x_i)). Note that this is a local interpolation method.
-    :param data_values: np.ndarray, shape(m, 2/3). If no derivatives given, they are approximated using
-        interpolating quadratics.
-    :return: SplineFunction of degree 3 representing the linear spline interpolant to the data. 
-    """
-
-    m, n = data_values.shape
-    p = 3
-
-    if n == 2:
-        x_values, f_values = data_values.T
-        df_values = approximate_derivatives(x_values, f_values)
-        data_values = np.append(data_values, df_values[:, None], 1)
-    else:
-        x_values, f_values, df_values = data_values.T
-
-    cubic_hermite_knots = create_interpolation_knots(x_values, interpol_type='cubic')
-    cubic_hermite_coeff = create_cubic_hermite_coefficients(data_values)
-
-    return SplineFunction(p, cubic_hermite_knots, cubic_hermite_coeff)
-'''
