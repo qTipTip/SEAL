@@ -1,5 +1,6 @@
 import numpy as np
 
+from SEAL.SplineFunction import RegularKnotVectorException
 from SEAL.lib import index, evaluate_non_zero_basis_splines
 
 
@@ -16,6 +17,27 @@ class TensorProductSplineFunction(object):
         self.c = np.array(coefficients, dtype=np.float64)
         self.t = np.array(knots[0], dtype=np.float64), np.array(knots[1], dtype=np.float64)
         self.d = self._determine_coefficient_space(self.c, self.m)
+
+    @property
+    def t(self):
+        return self._t
+
+    @t.setter
+    def t(self, t):
+        """
+        Verifies that the knot vectors are p+1 regular.
+        :param t: knot vectors
+        :raises: RegularKnotVectorException
+        """
+        for i, knot_vector in enumerate(t):
+            start = knot_vector[0]
+            end = knot_vector[-1]
+            if np.all(start == knot_vector[:self.p[i] + 1]) and np.all(end == knot_vector[-self.p[i] - 1:]):
+                continue
+            else:
+                raise RegularKnotVectorException(
+                    "The first p+1 knots must be equal, and the last p+1 knots must be equal")
+        self._t = t
 
     def _determine_coefficient_space(self, c, m):
         """

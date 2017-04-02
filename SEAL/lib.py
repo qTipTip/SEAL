@@ -58,7 +58,6 @@ def index(x, t):
     for i in range(len(t) - 1):
         if t[i] <= x < t[i + 1]:
             return i
-    return i
 
 
 def knot_averages(t, p):
