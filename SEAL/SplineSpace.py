@@ -70,7 +70,7 @@ class SplineSpace(object):
             Number of knots = {t}
         """.format(n=self.n, p=self.p, t=len(self.t))
 
-    def VDSA(self, f):
+    def vdsa(self, f):
         """
         Given a callable function f defined on the knot vector of S,
         finds the variation diminishing spline approximation (VDSA) to f

@@ -1,5 +1,9 @@
+import numpy as np
+
+from SEAL.SplineFunction import SplineFunction
 from SEAL.SplineSpace import SplineSpace
 from SEAL.TensorProductSplineFunction import TensorProductSplineFunction
+from SEAL.lib import knot_averages
 
 
 class TensorProductSplineSpace(object):
@@ -32,3 +36,40 @@ class TensorProductSplineSpace(object):
         """
 
         return TensorProductSplineFunction(self.p, self.t, c)
+
+    def parameter_values(self, resolution=100):
+        """
+        Returns an array of parameter values, uniformly spaced in the range t[0], t[n+p+1]
+        for each 
+        :param resolution: int, number of uniformly spaced values
+        :return: numpy array of :resolution: number of uniformly spaced values in the range
+        """
+        x_values = np.linspace(self.t[0][0], self.t[0][-1], resolution)
+        y_values = np.linspace(self.t[1][0], self.t[1][-1], resolution)
+
+        return x_values, y_values
+
+    def __str__(self):
+        """
+        Overrides the __str__ method to give some information about the spline space. 
+        :return: info-string
+        """
+        return """
+        TP Spline Space: 
+            Dimension       = {nx}/{ny}
+            Degree          = {px}/{py}
+            Number of knots = {tx}/{ty}
+        """.format(nx=self.n[0], ny=self.n[1], px=self.p[0], py=self.p[1], tx=len(self.t[0]), ty=len(self.t[1]))
+
+    def vdsa(self, f):
+        """
+        Given a callable function f defined on the knot vector of S,
+        finds the variation diminishing spline approximation (VDSA) to f
+        in the spline space S.
+
+        :param f: callable function defined on knot vector
+        :return: the variation diminishing spline approximation to f
+        """
+        vdsa_coefficients = [f(tau_x, tau_y) for tau_x, tau_y in
+                             zip(knot_averages(self.t[0], self.p[0]), knot_averages(self.t[1], self.p[1]))]
+        return SplineFunction(self.p, self.t, vdsa_coefficients)
