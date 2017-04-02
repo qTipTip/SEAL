@@ -1,7 +1,7 @@
 import numpy as np
 
 from SEAL.SplineFunction import RegularKnotVectorException
-from SEAL.lib import index, evaluate_non_zero_basis_splines
+from SEAL.lib import index, evaluate_non_zero_basis_splines, knot_averages
 
 
 class TensorProductSplineFunction(object):
@@ -101,6 +101,13 @@ class TensorProductSplineFunction(object):
     def control_mesh(self):
 
         if self.d == 1:
-            raise NotImplementedError('control mesh not implemented yet for scalar surfaces')
+            # raise NotImplementedError('control mesh not implemented yet for scalar surfaces')
+            knot_avg_x = knot_averages(self.t[0], self.p[0])
+            knot_avg_y = knot_averages(self.t[1], self.p[1])
+            control_mesh = np.zeros(shape=(len(knot_avg_x), len(knot_avg_x), 3))
+            for i, x in enumerate(knot_avg_x):
+                for j, y in enumerate(knot_avg_y):
+                    control_mesh[i, j] = (x, y, self.c[i, j])
+            return control_mesh
         else:
             return self.c
