@@ -60,21 +60,26 @@ class TensorProductSplineSpace(object):
             Number of knots = {tx}/{ty}
         """.format(nx=self.n[0], ny=self.n[1], px=self.p[0], py=self.p[1], tx=len(self.t[0]), ty=len(self.t[1]))
 
-    def vdsa(self, f):
+    def vdsa(self, f, function_type='scalar'):
         """
-        Given a callable function f defined on the knot vector of S,
+        Given a callable function f defined on the knot rectangle of S,
         finds the variation diminishing spline approximation (VDSA) to f
         in the spline space S.
 
-        :param f: callable function defined on knot vector
+        :param f: callable function defined on knot rectangle
+        :param function_type: string, whether f is scalar or parametric. 
         :return: the variation diminishing spline approximation to f
         """
         nx, ny = self.n
-        vdsa_coefficients = np.zeros(shape=(nx, ny))
+        if function_type == 'scalar':
+            dim = 1
+        elif function_type == 'parametric':
+            dim = 3
+        vdsa_coefficients = np.zeros(shape=(nx, ny, dim))
         x_averages = knot_averages(self.t[0], self.p[0])
         y_averages = knot_averages(self.t[1], self.p[1])
 
         for i, x in enumerate(x_averages):
             for j, y in enumerate(y_averages):
-                vdsa_coefficients[i, j] = f(x, y)
+                vdsa_coefficients[i, j, :] = f(x, y)
         return TensorProductSplineFunction(self.p, self.t, vdsa_coefficients)
