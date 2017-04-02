@@ -93,7 +93,14 @@ class TensorProductSplineFunction(object):
         bx = evaluate_non_zero_basis_splines(x, mu_x, self.t[0], self.p[0])
         by = evaluate_non_zero_basis_splines(y, mu_y, self.t[1], self.p[1])
         coeff = self.c[mu_x - self.p[0]: mu_x + 1, mu_y - self.p[1]: mu_y + 1]
-        nx, ny = len(bx), len(by)
 
         f = np.einsum('i,ijk,j->k', bx, coeff, by)  # compute the dot product over the first two axes.
         return f
+
+    @property
+    def control_mesh(self):
+
+        if self.d == 1:
+            raise NotImplementedError('control mesh not implemented yet for scalar surfaces')
+        else:
+            return self.c
