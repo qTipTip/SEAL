@@ -141,6 +141,7 @@ def approximate_derivatives(x_values, f_values):
     m = len(x_values)
 
     # TODO: Do type checking somewhere else
+    # if data is given as list, tuple or ndarray w/ shape (m,)
     if isinstance(f_values, (list, tuple)) or f_values.ndim == 1:
         f_values = np.array(f_values).reshape((m, 1))
     _, k = f_values.shape
