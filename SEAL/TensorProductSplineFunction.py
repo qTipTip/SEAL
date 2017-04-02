@@ -68,12 +68,9 @@ class TensorProductSplineFunction(object):
         mu_x = index(x, self.t[0])
         mu_y = index(y, self.t[1])
 
-        # TODO: Check this method. Something happens with the shape when
-        # TODO: evaluated AT the endpoint!!!
         bx = evaluate_non_zero_basis_splines(x, mu_x, self.t[0], self.p[0])
         by = evaluate_non_zero_basis_splines(y, mu_y, self.t[1], self.p[1])
         coeff = self.c[mu_x - self.p[0]: mu_x + 1, mu_y - self.p[1]: mu_y + 1]
-
         # TODO: Do this properly, make sure that SplineFunction does not break,
         # TODO: if we change the evaluate_non_zero_basis_splines
         # Have to reshape, to get proper dimensions

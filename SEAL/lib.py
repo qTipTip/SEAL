@@ -49,6 +49,12 @@ def index(x, t):
     :param t: knot vector
     :return: 
     """
+    if abs(x - t[-1]) <= 1.0e-14:
+        # at endpoint, return last non trivial index
+        # TODO: Make this less hackish
+        for i in range(len(t) - 1, 0, -1):
+            if t[i] < x:
+                return i
     for i in range(len(t) - 1):
         if t[i] <= x < t[i + 1]:
             return i
