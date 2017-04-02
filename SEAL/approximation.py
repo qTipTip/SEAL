@@ -21,35 +21,42 @@ def variation_diminishing_spline_approximation(f, p, t):
     return SplineFunction(p, t, vdsa_coefficients)
 
 
-def least_squares_spline_approximation(data_values, spline_space, weights=None):
-    """
-    Given a set of m data points (x_i, y_i), and a SplineSpace S,
-    compute the weighted least squares spline approximation to the data. 
-    :type spline_space: SplineSpace
-    :param data_values: np.ndarray, shape (m, 2)
-    :param spline_space: SplineSpace object
-    :param weights: Optional. np.ndarray, shape (m, 1), 
-    :return: SplineFunction, the least squares spline approximation
-    """
-
-    m, _ = data_values.shape
+def least_squares_spline_approximation(parameter_values, data_values, spline_space, weights=None):
+    m = len(parameter_values)
     n = spline_space.n
     basis = spline_space.basis
 
-    x_values, y_values = data_values.T
     if not weights:
         weights = np.ones(m)
 
-    # initialize linear system
-    A = np.zeros(shape=(m, n))
-    b = np.zeros(m)
+    # TODO: Make sure this is sufficient
+    if isinstance(data_values, (list, tuple)) or data_values.ndim == 1:
+        dim = 1
+        data_values = np.reshape(data_values, (m, 1))
+    else:
+        _, dim = data_values.shape
 
+    A = np.zeros(shape=(m, n, dim))
+    b = np.zeros(shape=(m, dim))
     for i in range(m):
         for j in range(n):
-            A[i, j] = weights[i] * basis[j](x_values[i])
-        b[i] = weights[i] * y_values[i]
+            A[i, j] = weights[i] * basis[j](parameter_values[i])
+        b[i] = weights[i] * data_values[i, :]
 
-    # solve linear system
-    c = np.linalg.solve(A.T.dot(A), A.T.dot(b))
+    coefficients = []
+    for i in range(dim):
+        component = np.linalg.solve(A[:, :, i].T.dot(A[:, :, i]), A[:, :, i].T.dot(b[:, i]))
+        coefficients.append(component)
 
-    return spline_space(c)
+    coefficients = np.column_stack(coefficients)
+    return spline_space(coefficients)
+
+
+def least_squares_tensor_approximation(data_values, spline_space, weights=None):
+    """
+    Given a set of gridded data 
+    :param data_values: 
+    :param spline_space: 
+    :param weights: 
+    :return: 
+    """
