@@ -1,6 +1,5 @@
 import numpy as np
 
-from SEAL.SplineFunction import SplineFunction
 from SEAL.SplineSpace import SplineSpace
 from SEAL.TensorProductSplineFunction import TensorProductSplineFunction
 from SEAL.lib import knot_averages
@@ -70,6 +69,12 @@ class TensorProductSplineSpace(object):
         :param f: callable function defined on knot vector
         :return: the variation diminishing spline approximation to f
         """
-        vdsa_coefficients = [f(tau_x, tau_y) for tau_x, tau_y in
-                             zip(knot_averages(self.t[0], self.p[0]), knot_averages(self.t[1], self.p[1]))]
-        return SplineFunction(self.p, self.t, vdsa_coefficients)
+        nx, ny = self.n
+        vdsa_coefficients = np.zeros(shape=(nx, ny))
+        x_averages = knot_averages(self.t[0], self.p[0])
+        y_averages = knot_averages(self.t[1], self.p[1])
+
+        for i, x in enumerate(x_averages):
+            for j, y in enumerate(y_averages):
+                vdsa_coefficients[i, j] = f(x, y)
+        return TensorProductSplineFunction(self.p, self.t, vdsa_coefficients)
