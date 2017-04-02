@@ -46,7 +46,7 @@ class SplineFunction(object):
         Determines the coefficient space.
         If the dimension is 1, we also reshape the (n,) array into a (n, 1) array, for
         later computation.
-        :param c: 
+        :param c: coefficients
         :return: 
         """
         if len(c.shape) == 1:
