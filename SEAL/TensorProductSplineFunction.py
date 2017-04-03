@@ -101,7 +101,6 @@ class TensorProductSplineFunction(object):
     def control_mesh(self):
 
         if self.d == 1:
-            # raise NotImplementedError('control mesh not implemented yet for scalar surfaces')
             knot_avg_x = knot_averages(self.t[0], self.p[0])
             knot_avg_y = knot_averages(self.t[1], self.p[1])
             control_mesh = np.zeros(shape=(len(knot_avg_x), len(knot_avg_x), 3))

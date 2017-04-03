@@ -78,7 +78,7 @@ def least_squares_tensor_approximation(parameter_values, data_values, spline_spa
     if weights is None:
         weights = np.ones(mx), np.ones(my)
 
-    if isinstance(data_values, (list, tuple)) or data_values.ndim == 1:
+    if len(data_values.shape) == 2:
         dim = 1
         data_values = np.reshape(data_values, (mx, my, 1))
     else:
