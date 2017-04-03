@@ -83,3 +83,7 @@ class TensorProductSplineSpace(object):
             for j, y in enumerate(y_averages):
                 vdsa_coefficients[i, j, :] = f(x, y)
         return TensorProductSplineFunction(self.p, self.t, vdsa_coefficients)
+
+    @property
+    def basis(self):
+        return [s.basis for s in self.S]
