@@ -105,6 +105,6 @@ def least_squares_tensor_approximation(parameter_values, data_values, spline_spa
     for i in range(dim):
         D = np.linalg.solve(A[:, :, i].T.dot(A[:, :, i]), A[:, :, i].T.dot(G[:, :, i]))
         component = np.linalg.solve(B[:, :, i].T.dot(B[:, :, i]), B[:, :, i].T.dot(D.T))
-        coefficients[:, :, i] = component
+        coefficients[:, :, i] = component.T  # TODO, check this transpose
 
     return spline_space(coefficients)

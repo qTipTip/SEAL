@@ -173,3 +173,27 @@ def approximate_derivatives(x_values, f_values):
             df_values[i, j] = (x_differences[i] * delta_values[i + 1] + x_differences[i + 1] * delta_values[i]) / (
                 x_differences[i] + x_differences[i + 1])
     return df_values
+
+
+def parametrize(data_values, data_type='curve', parametrization_type='uniform'):
+    """
+    Given a set of data points (x, y) or (x, y, z),
+    compute a suitable parametrization.
+    :param data_values: 
+    :return: 
+    """
+
+    if data_type == 'curve':
+        m, _ = data_values.shape
+        parameter_values = np.zeros(m)
+        for i in range(1, m):
+            parameter_values[i] = parameter_values[i-1] + np.linalg.norm(data_values[i] - data_values[i-1])
+        return parameter_values
+
+    elif data_type == 'surface':
+        raise NotImplementedError("Parametrization of gridded data is not yet implemented")
+        m, n, _ = data_values.shape
+        parameter_values_x = np.zeros(m)
+        parameter_values_y = np.zeros(n)
+        for i in range(1, m):
+            parameter_values_x[i] = parameter_values_y[i-1] + np.linalg.norm(data_values[i] - data_values[i-1])
