@@ -2,7 +2,7 @@ from SEAL.SplineFunction import SplineFunction
 from SEAL.lib import create_interpolation_knots, create_cubic_hermite_coefficients, approximate_derivatives
 
 
-def linear_spline_interpolation(data_values):
+def linear_spline_interpolation(parameter_values, data_values):
     """
     Computes the linear spline interpolation to the given
     m data points (x_i, y_i).
@@ -10,11 +10,10 @@ def linear_spline_interpolation(data_values):
     :return: SplineFunction of degree 1 representing the linear spline interpolation.
     """
 
-    x_values, y_values = data_values.T
-    t_values = create_interpolation_knots(x_values, interpol_type='linear')
+    t_values = create_interpolation_knots(parameter_values, interpol_type='linear')
     p = 1
 
-    f = SplineFunction(p, t_values, y_values)
+    f = SplineFunction(p, t_values, data_values)
     return f
 
 
