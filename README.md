@@ -27,5 +27,5 @@ SEAL currently supports:
 
 Download the repository and from the command line run:
 ```python
-$ python setup.py install
+python setup.py install
 ```
