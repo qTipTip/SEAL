@@ -15,11 +15,12 @@ class TestLinearSplineInterpolation(TestCase):
         Then:
             f(0) = 1, f(1) = 0, f(2) = 5, f(5) = 3
         """
-        data_values = np.array([(0, 1), (1, 0), (2, 5), (5, 3)])
-        f = linear_spline_interpolation(data_values)
+        x_values = np.array([0, 1, 2, 5])
+        y_values = np.array([1, 0, 5, 3])
+        f = linear_spline_interpolation(x_values, y_values)
 
         expected_values = [1, 0, 5, 3]
-        computed_values = [f(x) for x, _ in data_values]
+        computed_values = [f(x) for x in x_values]
 
         for e, c in zip(expected_values, computed_values):
             self.assertAlmostEqual(e, c)
