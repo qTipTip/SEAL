@@ -201,3 +201,31 @@ def parametrize(data_values, data_type='curve', parametrization_type='uniform'):
         parameter_values_y = np.zeros(n)
         for i in range(1, m):
             parameter_values_x[i] = parameter_values_y[i-1] + np.linalg.norm(data_values[i] - data_values[i-1])
+
+def compute_knot_insertion_matrix(p, tau, t):
+    """
+    Computes the knot insertion matrix that write coarse B-splines as linear combinations
+    of finer B-splines.
+    :param p: The degree
+    :param tau: The coarse knot vector
+    :param t: The fine knot vector
+    :return: The knot insertion matrix A
+    """
+    m = len(t) - (p + 1)
+    n = len(tau) - (p + 1)
+
+    a = np.zeros(shape=(m, n))
+    t = np.array(t, dtype=np.float64)
+    tau = np.array(tau, dtype=np.float64)
+
+    for i in range(m):
+        mu = index(t[i], tau)
+        b = 1
+        for k in range(1, p + 1):
+            tau1 = tau[mu - k + 1:mu + 1]
+            tau2 = tau[mu + 1:mu + k + 1]
+            omega = (t[i + k] - tau1) / (tau2 - tau1)
+            b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
+
+        a[i, mu - p:mu + 1] = b
+    return a
