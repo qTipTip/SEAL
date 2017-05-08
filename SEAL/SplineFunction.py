@@ -17,6 +17,7 @@ class SplineFunction(object):
         """
         self.p = degree
         self.c = np.array(coefficients, dtype=np.float64)
+        self._t = None
         self.t = np.array(knots, dtype=np.float64)
         self.d = self._determine_coefficient_space(self.c)
 
@@ -27,6 +28,7 @@ class SplineFunction(object):
     def t(self):
         return self._t
 
+    # noinspection PyTypeChecker,PyTypeChecker
     @t.setter
     def t(self, t):
         """

@@ -26,6 +26,7 @@ def least_squares_spline_approximation(parameter_values, data_values, spline_spa
     Given a set of m data points (x_i, y_i), and a SplineSpace S,
     compute the weighted least squares spline approximation to the data. 
     :type spline_space: SplineSpace
+    :param parameter_values: np.ndarray, shape (m, 2)
     :param data_values: np.ndarray, shape (m, 2)
     :param spline_space: SplineSpace object
     :param weights: Optional. np.ndarray, shape (m, 1), 

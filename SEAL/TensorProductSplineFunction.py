@@ -15,6 +15,7 @@ class TensorProductSplineFunction(object):
         self.p = degree
         self.m = len(degree)
         self.c = np.array(coefficients, dtype=np.float64)
+        self._t = None
         self.t = np.array(knots[0], dtype=np.float64), np.array(knots[1], dtype=np.float64)
         self.d = self._determine_coefficient_space(self.c, self.m)
 
@@ -22,6 +23,7 @@ class TensorProductSplineFunction(object):
     def t(self):
         return self._t
 
+    # noinspection PyTypeChecker
     @t.setter
     def t(self, t):
         """

@@ -8,5 +8,5 @@ setup(
     license='MIT',
     author='Ivar Stangeby',
     author_email='',
-    description='A spline library written in Python'
+    description='A spline library written in Python', requires=['numpy']
 )

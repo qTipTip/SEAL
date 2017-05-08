@@ -6,6 +6,7 @@ def linear_spline_interpolation(parameter_values, data_values):
     """
     Computes the linear spline interpolation to the given
     m data points (x_i, y_i).
+    :param parameter_values: np.ndarray, shape (m, )
     :param data_values: np.ndarray, shape (m, 2)
     :return: SplineFunction of degree 1 representing the linear spline interpolation.
     """

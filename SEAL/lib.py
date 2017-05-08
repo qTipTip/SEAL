@@ -1,6 +1,7 @@
 import numpy as np
 
 
+# noinspection PyTypeChecker
 def evaluate_non_zero_basis_splines(x, mu, t, p):
     """
    Evaluates the non-zero basis splines of degree p at the point x.
@@ -35,6 +36,7 @@ def evaluate_non_zero_basis_splines(x, mu, t, p):
             t1 = t[mu - k + 1: mu + 1]
             t2 = t[mu + 1: mu + k + 1]
             # append 0 to end of first term, and insert 0 to start of second term
+            # noinspection PyArgumentList
             omega = np.divide((x - t1), (t2 - t1), out=np.zeros_like(t1), where=((t2 - t1) != 0))
             b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
 
@@ -179,7 +181,9 @@ def parametrize(data_values, data_type='curve', parametrization_type='uniform'):
     """
     Given a set of data points (x, y) or (x, y, z),
     compute a suitable parametrization.
+    :param data_type: indicates whether the data_values describe a curve or a surface.
     :param data_values: 
+    :param parametrization_type: uniform/chordal
     :return: 
     """
 

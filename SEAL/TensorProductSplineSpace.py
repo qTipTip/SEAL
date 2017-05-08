@@ -75,6 +75,8 @@ class TensorProductSplineSpace(object):
             dim = 1
         elif function_type == 'parametric':
             dim = 3
+        else:
+            dim = 1
         vdsa_coefficients = np.zeros(shape=(nx, ny, dim))
         x_averages = knot_averages(self.t[0], self.p[0])
         y_averages = knot_averages(self.t[1], self.p[1])
