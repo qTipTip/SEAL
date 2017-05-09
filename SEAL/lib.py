@@ -208,8 +208,8 @@ def compute_knot_insertion_matrix(p, tau, t):
     Computes the knot insertion matrix that write coarse B-splines as linear combinations
     of finer B-splines. Requires tau, t to be p+1 regular.
     :param p: The degree
-    :param tau: The coarse knot vector
-    :param t: The fine knot vector
+    :param tau: p+1 regular coarse knot vector with common ends
+    :param t: p+1 regular fine knot vector with common ends
     :return: The knot insertion matrix A
     """
     m = len(t) - (p + 1)
@@ -228,3 +228,36 @@ def compute_knot_insertion_matrix(p, tau, t):
             b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
         a[i, mu - p:mu + 1] = b
     return a
+
+
+def compute_finer_b_spline_coefficients(p, t, tau, c):
+    """
+    Oslo Algorithm 2
+    :param p: B-Spline degree
+    :param tau: p+1 regular knot vector, with common ends
+    :param t: p+1 regular knot vector, with common ends
+    :param c: spline coefficients of coarse spline
+    :return: b, spline coefficients in finer space
+    """
+
+    m = len(t) - (p + 1)
+    n = len(tau) - (p + 1)
+    b = np.zeros(m)
+
+    t = np.array(t, dtype=np.float64)
+    tau = np.array(tau, dtype=np.float64)
+
+    for i in range(m):
+        mu = index(tau, t[i])
+        if p == 0:
+            b[i] = c[mu]
+        else:
+            C = c[mu - p: mu + 1]
+            for j in range(0, p):
+                k = p - j
+                tau1 = tau[mu - k + 1:mu + 1]
+                tau2 = tau[mu + 1:mu + k + 1]
+                omega = (t[i + k] - tau1) / (tau2 - tau1)
+                C = (1 - omega) * C[:-1] + omega * C[1:]
+            b[i] = C
+    return b
