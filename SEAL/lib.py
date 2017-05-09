@@ -230,7 +230,7 @@ def compute_knot_insertion_matrix(p, tau, t):
     return a
 
 
-def compute_finer_b_spline_coefficients(p, t, tau, c):
+def compute_fine_spline_coefficients(p, t, tau, c):
     """
     Oslo Algorithm 2
     :param p: B-Spline degree
