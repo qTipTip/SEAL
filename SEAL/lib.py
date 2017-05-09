@@ -212,6 +212,10 @@ def compute_knot_insertion_matrix(p, tau, t):
     :param t: p+1 regular fine knot vector with common ends
     :return: The knot insertion matrix A
     """
+    #TODO: Enforce p+1 regularity properly
+    assert t[0:p + 1] == tau[0:p + 1]
+    assert t[-(p + 1):-1] == tau[-(p + 1):-1]
+
     m = len(t) - (p + 1)
     n = len(tau) - (p + 1)
 
@@ -230,15 +234,18 @@ def compute_knot_insertion_matrix(p, tau, t):
     return a
 
 
-def compute_fine_spline_coefficients(p, t, tau, c):
+def compute_fine_spline_coefficients(p, tau, t, c):
     """
     Oslo Algorithm 2
-    :param p: B-Spline degree
-    :param tau: p+1 regular knot vector, with common ends
-    :param t: p+1 regular knot vector, with common ends
-    :param c: spline coefficients of coarse spline
+    :p: Bspline degree
+    :tau: p+1 regular knot vector, with common ends
+    :t: p+1 regular knot vector, with common ends
+    :c: spline coefficients
     :return: b, spline coefficients in finer space
     """
+    #TODO: Enforce p+1 regularity properly
+    assert t[0:p + 1] == tau[0:p + 1]
+    assert t[-(p + 1):-1] == tau[-(p + 1):-1]
 
     m = len(t) - (p + 1)
     n = len(tau) - (p + 1)
@@ -248,7 +255,7 @@ def compute_fine_spline_coefficients(p, t, tau, c):
     tau = np.array(tau, dtype=np.float64)
 
     for i in range(m):
-        mu = index(tau, t[i])
+        mu = index(t[i], tau)
         if p == 0:
             b[i] = c[mu]
         else:
