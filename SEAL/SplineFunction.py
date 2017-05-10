@@ -1,6 +1,6 @@
 import numpy as np
 
-from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages
+from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages, compute_fine_spline_coefficients
 
 
 class RegularKnotVectorException(Exception):
@@ -102,3 +102,12 @@ class SplineFunction(object):
             return np.column_stack((knot_avg, self.c))
         else:
             return self.c
+
+    def refine(self, refined_knots):
+        """
+        :param refined_knots: np.array representing a refinement of the knot vector self.t
+        :return: SplineFunction, the same spline, represented in a finer space.
+        """
+        
+        refined_coefficients = compute_fine_spline_coefficients(self.p, self.t, refined_knots, self.c)
+        return SplineFunction(self.p, refined_coefficients, refined_knots)
