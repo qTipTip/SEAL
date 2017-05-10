@@ -281,3 +281,26 @@ def compute_fine_spline_coefficients(p, tau, t, c):
                     C = (1 - omega) * C[:-1] + omega * C[1:]
                 b[i, component] = C
     return b
+
+
+def insert_midpoints(knots, p):
+    """
+    Inserts midpoints in all interior knot intervals of a p+1 regular knot vector.
+    :param knots: p + 1 regular knot vector to be refined
+    :param p: spline degree
+    :return: refined_knots
+    """
+
+    knots = np.array(knots, dtype=np.float64)
+    midpoints = (knots[p:-p - 1] + knots[p + 1:-p]) / 2
+    new_array = np.zeros(len(knots) + len(midpoints), dtype=np.float64)
+
+    new_array[:p + 1] = knots[:p + 1]
+    new_array[-p - 1:] = knots[-p - 1]
+    new_array[p + 1:p + 2 * len(midpoints):2] = midpoints
+    new_array[p + 2:p + 2 * len(midpoints) - 1:2] = knots[p + 1:-p - 1]
+
+    return new_array
+
+
+

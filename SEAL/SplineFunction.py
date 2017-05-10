@@ -1,6 +1,7 @@
 import numpy as np
 
-from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages, compute_fine_spline_coefficients
+from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages, compute_fine_spline_coefficients, \
+    insert_midpoints
 
 
 class RegularKnotVectorException(Exception):
@@ -111,3 +112,18 @@ class SplineFunction(object):
 
         refined_coefficients = compute_fine_spline_coefficients(self.p, self.t, refined_knots, self.c)
         return SplineFunction(self.p, refined_knots, refined_coefficients)
+
+    def visualize(self, iterations=5):
+        """
+        Returns the control polygon of the refined spline where midpoints
+        have been inserted :iterations: number of times.
+        :param iterations: Number of refinement
+        :return: 
+        """
+
+        f = self
+        t = self.t
+        for i in range(iterations):
+            t = insert_midpoints(t, self.p)
+            f = f.refine(t)
+        return f.control_polygon
