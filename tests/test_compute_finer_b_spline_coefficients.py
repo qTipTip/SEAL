@@ -24,5 +24,7 @@ class TestComputeFineSplineCoefficients(TestCase):
         expected_b = np.array([1, -0.5, -1, 1, 0.5, -1])
         computed_b = compute_fine_spline_coefficients(p, tau, t, c)
 
+        print(expected_b)
+        print(computed_b)
         for e, c in zip(expected_b, computed_b):
             self.assertAlmostEqual(e, c)

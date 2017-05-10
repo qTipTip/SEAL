@@ -108,6 +108,6 @@ class SplineFunction(object):
         :param refined_knots: np.array representing a refinement of the knot vector self.t
         :return: SplineFunction, the same spline, represented in a finer space.
         """
-        
+
         refined_coefficients = compute_fine_spline_coefficients(self.p, self.t, refined_knots, self.c)
-        return SplineFunction(self.p, refined_coefficients, refined_knots)
+        return SplineFunction(self.p, refined_knots, refined_coefficients)

@@ -237,34 +237,47 @@ def compute_knot_insertion_matrix(p, tau, t):
 def compute_fine_spline_coefficients(p, tau, t, c):
     """
     Oslo Algorithm 2
-    :p: Bspline degree
+    :p: BSpline degree
     :tau: p+1 regular knot vector, with common ends
     :t: p+1 regular knot vector, with common ends
     :c: spline coefficients
     :return: b, spline coefficients in finer space
     """
-    #TODO: Enforce p+1 regularity properly
-    assert t[0:p + 1] == tau[0:p + 1]
-    assert t[-(p + 1):-1] == tau[-(p + 1):-1]
+
+    # TODO: Enforce p+1 regularity properly
+    # assert t[0:p + 1] == tau[0:p + 1]
+    # assert t[-(p + 1):-1] == tau[-(p + 1):-1]
 
     m = len(t) - (p + 1)
     n = len(tau) - (p + 1)
-    b = np.zeros(m)
 
+    # makes sure that the dimensions of the array are
+    # properly handled.
+
+    if isinstance(c, (list, tuple)) or c.ndim == 1:
+        dim = 1
+        c = np.reshape(c, (len(c), 1))
+    else:
+        _, dim = c.shape
+    
+    b = np.zeros(shape=(m, dim))
     t = np.array(t, dtype=np.float64)
     tau = np.array(tau, dtype=np.float64)
 
-    for i in range(m):
-        mu = index(t[i], tau)
-        if p == 0:
-            b[i] = c[mu]
-        else:
-            C = c[mu - p: mu + 1]
-            for j in range(0, p):
-                k = p - j
-                tau1 = tau[mu - k + 1:mu + 1]
-                tau2 = tau[mu + 1:mu + k + 1]
-                omega = (t[i + k] - tau1) / (tau2 - tau1)
-                C = (1 - omega) * C[:-1] + omega * C[1:]
-            b[i] = C
+    # outer for loop loops over the spacial dimensions, i.e.,
+    # the number of components in each coefficient.
+    for component in range(dim):
+        for i in range(m):
+            mu = index(t[i], tau)
+            if p == 0:
+                b[i] = c[mu, component]
+            else:
+                C = c[mu - p: mu + 1, component]
+                for j in range(0, p):
+                    k = p - j
+                    tau1 = tau[mu - k + 1:mu + 1]
+                    tau2 = tau[mu + 1:mu + k + 1]
+                    omega = (t[i + k] - tau1) / (tau2 - tau1)
+                    C = (1 - omega) * C[:-1] + omega * C[1:]
+                b[i, component] = C
     return b
