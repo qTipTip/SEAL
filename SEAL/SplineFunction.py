@@ -1,7 +1,7 @@
 import numpy as np
 
 from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages, compute_fine_spline_coefficients, \
-    insert_midpoints
+    insert_midpoints, evaluate_blossom
 
 
 class RegularKnotVectorException(Exception):
@@ -127,3 +127,12 @@ class SplineFunction(object):
             t = insert_midpoints(t, self.p)
             f = f.refine(t)
         return f.control_polygon
+
+    def evaluate_blossom(self, x, mu):
+        """
+        Returns the value of the p-variate polar form of the SplineFunction f restricted to the interval [t_mu, t_mu+1)..
+        :param x: np.ndarray [x_1, ..., x_p]
+        :return: B[f](x), the blossom of the spline function evaluated at x = [x_1, ..., x_p]
+        """
+
+        return evaluate_blossom(self.p, self.t, mu, self.c, x)
