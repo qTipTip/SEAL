@@ -303,4 +303,28 @@ def insert_midpoints(knots, p):
     return new_array
 
 
+def evaluate_blossom(p, t, mu, c, x):
+    """
+    Evaluates the blossom of a spline function of degree p over the knot vector t with coefficients c
+    :param p: The degree
+    :param t: p+1 regular knot vector 
+    :param mu: the index mu such that t_mu <= x < t_mu+1
+    :param c: the set of spline coefficients
+    :param x: the set of p parameters x = [x_1, ..., x_p]
+    :return: The blossom of f evaluated at x = [x_1, ..., x_p]
+    """
 
+    t = np.array(t, dtype=np.float64)
+    c = np.array(c)[mu - p:mu+1]
+    b = 1
+    for i, k in enumerate(range(1, p + 1)):
+        # extract relevant knots
+        t1 = t[mu - k + 1: mu + 1]
+        t2 = t[mu + 1: mu + k + 1]
+        # append 0 to end of first term, and insert 0 to start of second term
+        # noinspection PyArgumentList
+        omega = np.divide((x[i] - t1), (t2 - t1), out=np.zeros_like(t1), where=((t2 - t1) != 0))
+        b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
+
+
+    return b.T.dot(c)
