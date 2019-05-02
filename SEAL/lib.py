@@ -173,7 +173,7 @@ def approximate_derivatives(x_values, f_values):
         delta_values = np.divide(f_differences, x_differences)
         for i in range(0, m):
             df_values[i, j] = (x_differences[i] * delta_values[i + 1] + x_differences[i + 1] * delta_values[i]) / (
-                x_differences[i] + x_differences[i + 1])
+                    x_differences[i] + x_differences[i + 1])
     return df_values
 
 
@@ -191,7 +191,7 @@ def parametrize(data_values, data_type='curve', parametrization_type='uniform'):
         m, _ = data_values.shape
         parameter_values = np.zeros(m)
         for i in range(1, m):
-            parameter_values[i] = parameter_values[i-1] + np.linalg.norm(data_values[i] - data_values[i-1])
+            parameter_values[i] = parameter_values[i - 1] + np.linalg.norm(data_values[i] - data_values[i - 1])
         return parameter_values
 
     elif data_type == 'surface':
@@ -200,7 +200,7 @@ def parametrize(data_values, data_type='curve', parametrization_type='uniform'):
         parameter_values_x = np.zeros(m)
         parameter_values_y = np.zeros(n)
         for i in range(1, m):
-            parameter_values_x[i] = parameter_values_y[i-1] + np.linalg.norm(data_values[i] - data_values[i-1])
+            parameter_values_x[i] = parameter_values_y[i - 1] + np.linalg.norm(data_values[i] - data_values[i - 1])
 
 
 def compute_knot_insertion_matrix(p, tau, t):
@@ -212,9 +212,13 @@ def compute_knot_insertion_matrix(p, tau, t):
     :param t: p+1 regular fine knot vector with common ends
     :return: The knot insertion matrix A
     """
-    #TODO: Enforce p+1 regularity properly
-    assert t[0:p + 1] == tau[0:p + 1]
-    assert t[-(p + 1):-1] == tau[-(p + 1):-1]
+
+    # We fetch the smallest and largest knot from either knot vector, and pad with p+1 to either side.
+    low = min(min(tau), min(t)) - 1
+    high = max(max(tau), max(t)) + 1
+
+    t = np.pad(t, pad_width=p + 1, mode='constant', constant_values=[low, high])
+    tau = np.pad(tau, pad_width=p + 1, mode='constant', constant_values=[low, high])
 
     m = len(t) - (p + 1)
     n = len(tau) - (p + 1)
@@ -231,7 +235,7 @@ def compute_knot_insertion_matrix(p, tau, t):
             omega = (t[i + k] - tau1) / (tau2 - tau1)
             b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
         a[i, mu - p:mu + 1] = b
-    return a
+    return a[p + 1:-p - 1, p + 1:-p - 1]
 
 
 def compute_fine_spline_coefficients(p, tau, t, c):
@@ -259,7 +263,7 @@ def compute_fine_spline_coefficients(p, tau, t, c):
         c = np.reshape(c, (len(c), 1))
     else:
         _, dim = c.shape
-    
+
     b = np.zeros(shape=(m, dim))
     t = np.array(t, dtype=np.float64)
     tau = np.array(tau, dtype=np.float64)
@@ -315,7 +319,7 @@ def evaluate_blossom(p, t, mu, c, x):
     """
 
     t = np.array(t, dtype=np.float64)
-    c = np.array(c)[mu - p:mu+1]
+    c = np.array(c)[mu - p:mu + 1]
     b = 1
     for i, k in enumerate(range(1, p + 1)):
         # extract relevant knots
@@ -325,6 +329,5 @@ def evaluate_blossom(p, t, mu, c, x):
         # noinspection PyArgumentList
         omega = np.divide((x[i] - t1), (t2 - t1), out=np.zeros_like(t1), where=((t2 - t1) != 0))
         b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
-
 
     return b.T.dot(c)
