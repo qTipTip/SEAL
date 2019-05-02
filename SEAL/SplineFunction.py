@@ -29,6 +29,13 @@ class SplineFunction(object):
     def t(self):
         return self._t
 
+    @t.setter
+    def t(self, t):
+        """
+        :param t: knot vector
+        """
+        self._t = t
+
     def _determine_coefficient_space(self, c):
         """
         Determines the coefficient space.
