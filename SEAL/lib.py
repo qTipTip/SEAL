@@ -1,7 +1,6 @@
 import numpy as np
 
 
-# noinspection PyTypeChecker
 def evaluate_non_zero_basis_splines(x, mu, t, p):
     """
    Evaluates the non-zero basis splines of degree p at the point x.
