@@ -325,7 +325,6 @@ def evaluate_blossom(p, t, mu, c, x):
         t1 = t[mu - k + 1: mu + 1]
         t2 = t[mu + 1: mu + k + 1]
         # append 0 to end of first term, and insert 0 to start of second term
-        # noinspection PyArgumentList
         omega = np.divide((x[i] - t1), (t2 - t1), out=np.zeros_like(t1), where=((t2 - t1) != 0))
         b = np.append((1 - omega) * b, 0) + np.insert((omega * b), 0, 0)
 
