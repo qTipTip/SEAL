@@ -29,21 +29,6 @@ class SplineFunction(object):
     def t(self):
         return self._t
 
-    # noinspection PyTypeChecker,PyTypeChecker
-    @t.setter
-    def t(self, t):
-        """
-        Verifies that the knot vector is p+1 regular. 
-        :param t: knot vector
-        :raises: RegularKnotVectorException
-        """
-        start = t[0]
-        end = t[-1]
-        if np.all(start == t[:self.p + 1]) and np.all(end == t[-self.p - 1:]):
-            self._t = t
-        else:
-            raise RegularKnotVectorException("The first p+1 knots must be equal, and the last p+1 knots must be equal")
-
     def _determine_coefficient_space(self, c):
         """
         Determines the coefficient space.
