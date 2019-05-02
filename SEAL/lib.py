@@ -247,21 +247,23 @@ def compute_fine_spline_coefficients(p, tau, t, c):
     :return: b, spline coefficients in finer space
     """
 
-    # TODO: Enforce p+1 regularity properly
-    # assert t[0:p + 1] == tau[0:p + 1]
-    # assert t[-(p + 1):-1] == tau[-(p + 1):-1]
+    # We fetch the smallest and largest knot from either knot vector, and pad with p+1 to either side.
+    low = min(min(tau), min(t)) - 1
+    high = max(max(tau), max(t)) + 1
 
+    t = np.pad(t, pad_width=p + 1, mode='constant', constant_values=[low, high])
+    tau = np.pad(tau, pad_width=p + 1, mode='constant', constant_values=[low, high])
     m = len(t) - (p + 1)
     n = len(tau) - (p + 1)
 
     # makes sure that the dimensions of the array are
     # properly handled.
-
     if isinstance(c, (list, tuple)) or c.ndim == 1:
         dim = 1
         c = np.reshape(c, (len(c), 1))
     else:
         _, dim = c.shape
+    c = np.pad(c, pad_width=((p + 1, p + 1), (0, 0)), mode='constant', constant_values=0)
 
     b = np.zeros(shape=(m, dim))
     t = np.array(t, dtype=np.float64)
@@ -283,7 +285,7 @@ def compute_fine_spline_coefficients(p, tau, t, c):
                     omega = (t[i + k] - tau1) / (tau2 - tau1)
                     C = (1 - omega) * C[:-1] + omega * C[1:]
                 b[i, component] = C
-    return b
+    return b[p + 1:-p - 1]
 
 
 def insert_midpoints(knots, p):
