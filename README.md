@@ -23,9 +23,11 @@ SEAL currently supports:
 
 ### Installation
 
-##### Manual:
-
-Download the repository and from the command line run:
-```python
-python setup.py install
+You can install `SEAL` using `pip`:
+```shell
+pip install spline-algorithm-library
+```
+or using `Poetry`:
+```shell
+poetry add spline-algorithm-library
 ```

@@ -30,7 +30,7 @@ class TestSplineFunction(TestCase):
             f = SplineFunction(p, t, c)
             computed_d = f.d
 
-            self.assertEquals(computed_d, expected_d)
+            self.assertEqual(computed_d, expected_d)
 
     def test_call(self):
         """
