@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "SEAL"
+name = "spline-algorithm-library"
 version = "1.0.0"
 description = "A spline library written in Python"
 authors = ["Ivar Stangeby"]
