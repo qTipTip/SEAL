@@ -3,4 +3,5 @@ repos:
     rev: 'v0.931'  # Use the sha / tag you want to point at
     hooks:
     -   id: mypy
-        args: [--strict]
+        files: "^SEAL/"
+        args: []
