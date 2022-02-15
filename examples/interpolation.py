@@ -18,8 +18,8 @@ Hf_df_values = Hf_df(x_values)
 
 f_values = np.sin(x_values)
 
-plt.plot(x_values, f_values, label='Exact')
-plt.plot(x_values, Hf_df_values, label='With derivatives')
-plt.plot(x_values, Hf_no_df_values, label='Without derivatives')
+plt.plot(x_values, f_values, label="Exact")
+plt.plot(x_values, Hf_df_values, label="With derivatives")
+plt.plot(x_values, Hf_no_df_values, label="Without derivatives")
 plt.legend()
 plt.show()

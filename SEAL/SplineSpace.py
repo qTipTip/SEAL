@@ -22,7 +22,9 @@ class SplineSpace(object):
         self.n = len(t) - p - 1
 
         # TODO: Handle this properly
-        assert self.n > 0, "The knot vector has to be of at least length p + 2 = {p}".format(p=p + 2)
+        assert (
+            self.n > 0
+        ), "The knot vector has to be of at least length p + 2 = {p}".format(p=p + 2)
 
     def __call__(self, c):
         """
@@ -47,7 +49,7 @@ class SplineSpace(object):
     @property
     def basis(self):
         """
-        :return: Returns the n B-splines as callable SplineFunction objects 
+        :return: Returns the n B-splines as callable SplineFunction objects
         """
 
         basis = []
@@ -68,14 +70,16 @@ class SplineSpace(object):
             Dimension       = {n}
             Degree          = {p}
             Number of knots = {t}
-        """.format(n=self.n, p=self.p, t=len(self.t))
+        """.format(
+            n=self.n, p=self.p, t=len(self.t)
+        )
 
     def vdsa(self, f):
         """
         Given a callable function f defined on the knot vector of S,
         finds the variation diminishing spline approximation (VDSA) to f
         in the spline space S.
-        
+
         :param f: callable function defined on knot vector
         :return: the variation diminishing spline approximation to f
         """

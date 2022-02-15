@@ -1,7 +1,13 @@
 import numpy as np
 
-from SEAL.lib import evaluate_non_zero_basis_splines, index, knot_averages, compute_fine_spline_coefficients, \
-    insert_midpoints, evaluate_blossom
+from SEAL.lib import (
+    evaluate_non_zero_basis_splines,
+    index,
+    knot_averages,
+    compute_fine_spline_coefficients,
+    insert_midpoints,
+    evaluate_blossom,
+)
 
 
 class RegularKnotVectorException(Exception):
@@ -42,7 +48,7 @@ class SplineFunction(object):
         If the dimension is 1, we also reshape the (n,) array into a (n, 1) array, for
         later computation.
         :param c: coefficients
-        :return: 
+        :return:
         """
         if len(c.shape) == 1:
             self.c = c.reshape(len(c), 1)
@@ -73,7 +79,7 @@ class SplineFunction(object):
 
         mu = index(x, self.t)
         B = evaluate_non_zero_basis_splines(x, mu, self.t, self.p)
-        C = self.c[mu - self.p:mu - self.p + len(B)]
+        C = self.c[mu - self.p : mu - self.p + len(B)]
         B = np.reshape(B, (len(B), 1))
 
         # TODO: Dot product here? More elegant
@@ -86,8 +92,8 @@ class SplineFunction(object):
         Returns the control polygon of the spline curve.
         Using knot averages if the curve is a spline function, and
         the spline coefficients if the curve is parametric.
-        
-        :return: a set of control points determining the control polygon 
+
+        :return: a set of control points determining the control polygon
         """
 
         if self.d == 1:
@@ -102,7 +108,9 @@ class SplineFunction(object):
         :return: SplineFunction, the same spline, represented in a finer space.
         """
 
-        refined_coefficients = compute_fine_spline_coefficients(self.p, self.t, refined_knots, self.c)
+        refined_coefficients = compute_fine_spline_coefficients(
+            self.p, self.t, refined_knots, self.c
+        )
         return SplineFunction(self.p, refined_knots, refined_coefficients)
 
     def visualize(self, iterations=5):
@@ -110,7 +118,7 @@ class SplineFunction(object):
         Returns the control polygon of the refined spline where midpoints
         have been inserted :iterations: number of times.
         :param iterations: Number of refinement
-        :return: 
+        :return:
         """
 
         f = self

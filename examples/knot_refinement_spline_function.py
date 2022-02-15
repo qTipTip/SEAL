@@ -27,4 +27,3 @@ ax.plot(*zip(*y_refined))
 ax.plot(*zip(*cp))
 ax.plot(*zip(*cp_refined))
 plt.show()
-

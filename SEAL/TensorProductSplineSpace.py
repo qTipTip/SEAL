@@ -39,7 +39,7 @@ class TensorProductSplineSpace(object):
     def parameter_values(self, resolution=100):
         """
         Returns an array of parameter values, uniformly spaced in the range t[0], t[n+p+1]
-        for each 
+        for each
         :param resolution: int, number of uniformly spaced values
         :return: numpy array of :resolution: number of uniformly spaced values in the range
         """
@@ -50,7 +50,7 @@ class TensorProductSplineSpace(object):
 
     def __str__(self):
         """
-        Overrides the __str__ method to give some information about the spline space. 
+        Overrides the __str__ method to give some information about the spline space.
         :return: info-string
         """
         return """
@@ -58,22 +58,29 @@ class TensorProductSplineSpace(object):
             Dimension       = {nx}/{ny}
             Degree          = {px}/{py}
             Number of knots = {tx}/{ty}
-        """.format(nx=self.n[0], ny=self.n[1], px=self.p[0], py=self.p[1], tx=len(self.t[0]), ty=len(self.t[1]))
+        """.format(
+            nx=self.n[0],
+            ny=self.n[1],
+            px=self.p[0],
+            py=self.p[1],
+            tx=len(self.t[0]),
+            ty=len(self.t[1]),
+        )
 
-    def vdsa(self, f, function_type='scalar'):
+    def vdsa(self, f, function_type="scalar"):
         """
         Given a callable function f defined on the knot rectangle of S,
         finds the variation diminishing spline approximation (VDSA) to f
         in the spline space S.
 
         :param f: callable function defined on knot rectangle
-        :param function_type: string, whether f is scalar or parametric. 
+        :param function_type: string, whether f is scalar or parametric.
         :return: the variation diminishing spline approximation to f
         """
         nx, ny = self.n
-        if function_type == 'scalar':
+        if function_type == "scalar":
             dim = 1
-        elif function_type == 'parametric':
+        elif function_type == "parametric":
             dim = 3
         else:
             dim = 1

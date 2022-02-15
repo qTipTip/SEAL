@@ -8,15 +8,17 @@ class TensorProductSplineFunction(object):
     def __init__(self, degree, knots, coefficients):
         """
         Initialize a tensor product spline function
-        :param degree: Spline degrees in each direction 
-        :param knots: A set of p_i + n_i + 1 increasing real values in each direction  
+        :param degree: Spline degrees in each direction
+        :param knots: A set of p_i + n_i + 1 increasing real values in each direction
         :param coefficients: A matrix/tensor of dimension (m_1, m_2).
         """
         self.p = degree
         self.m = len(degree)
         self.c = np.array(coefficients, dtype=np.float64)
         self._t = None
-        self.t = np.array(knots[0], dtype=np.float64), np.array(knots[1], dtype=np.float64)
+        self.t = np.array(knots[0], dtype=np.float64), np.array(
+            knots[1], dtype=np.float64
+        )
         self.d = self._determine_coefficient_space(self.c, self.m)
 
     @property
@@ -34,11 +36,14 @@ class TensorProductSplineFunction(object):
         for i, knot_vector in enumerate(t):
             start = knot_vector[0]
             end = knot_vector[-1]
-            if np.all(start == knot_vector[:self.p[i] + 1]) and np.all(end == knot_vector[-self.p[i] - 1:]):
+            if np.all(start == knot_vector[: self.p[i] + 1]) and np.all(
+                end == knot_vector[-self.p[i] - 1 :]
+            ):
                 continue
             else:
                 raise RegularKnotVectorException(
-                    "The first p+1 knots must be equal, and the last p+1 knots must be equal")
+                    "The first p+1 knots must be equal, and the last p+1 knots must be equal"
+                )
         self._t = t
 
     def _determine_coefficient_space(self, c, m):
@@ -48,7 +53,7 @@ class TensorProductSplineFunction(object):
         into a (n_1, n_2, 1) array for later computation.
         :param c: coefficients
         :param m: number of axes
-        :return: 
+        :return:
         """
         if len(c.shape) == m:
             self.c = self.c.reshape(tuple([m_i for m_i in c.shape] + [1]))
@@ -58,13 +63,15 @@ class TensorProductSplineFunction(object):
     def __call__(self, x, y):
         """
         Overrides the __call__ operator for the TensorProductSplineFunction.
-        :param x: np.ndarray of shape (M,) or scalar value 
+        :param x: np.ndarray of shape (M,) or scalar value
         :param y: np.ndarray of shape (N,) or scalar value
-        :return: f(x, y) 
+        :return: f(x, y)
         """
 
         # array of values
-        if isinstance(x, (list, tuple, np.ndarray)) and isinstance(y, (list, tuple, np.ndarray)):
+        if isinstance(x, (list, tuple, np.ndarray)) and isinstance(
+            y, (list, tuple, np.ndarray)
+        ):
             f_values = np.zeros(shape=(len(x), len(y), self.d))
             for i in range(len(x)):
                 for j in range(len(y)):
@@ -94,9 +101,11 @@ class TensorProductSplineFunction(object):
 
         bx = evaluate_non_zero_basis_splines(x, mu_x, self.t[0], self.p[0])
         by = evaluate_non_zero_basis_splines(y, mu_y, self.t[1], self.p[1])
-        coeff = self.c[mu_x - self.p[0]: mu_x + 1, mu_y - self.p[1]: mu_y + 1]
+        coeff = self.c[mu_x - self.p[0] : mu_x + 1, mu_y - self.p[1] : mu_y + 1]
 
-        f = np.einsum('i,ijk,j->k', bx, coeff, by)  # compute the dot product over the first two axes.
+        f = np.einsum(
+            "i,ijk,j->k", bx, coeff, by
+        )  # compute the dot product over the first two axes.
         return f
 
     @property

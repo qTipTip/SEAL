@@ -9,14 +9,14 @@ class TestCreateInterpolationKnots(TestCase):
         Given:
             x_values = [0, 1, 2, 3, 4, 5, 6, 7]
         When:
-            Constructing 2-regular knot vector from these x_values, for 
+            Constructing 2-regular knot vector from these x_values, for
             linear spline interpolation.
         Then:
             t = [0, 0, 1, 2, 3, 4, 5, 6, 7, 7]
         """
         x_values = [0, 1, 2, 3, 4, 5, 6, 7]
         expected_values = [0, 0, 1, 2, 3, 4, 5, 6, 7, 7]
-        computed_values = create_interpolation_knots(x_values, interpol_type='linear')
+        computed_values = create_interpolation_knots(x_values, interpol_type="linear")
 
         for e, c in zip(expected_values, computed_values):
             self.assertAlmostEqual(e, c)
@@ -25,7 +25,7 @@ class TestCreateInterpolationKnots(TestCase):
         """
         Given:
             x_values = [0, 1, 2, 3, 4, 5, 6, 7]
-        When: 
+        When:
             Constructing the 4-regular knot vector from these x_values, with
             double interior knots, for cubic spline interpolation
         Then:
@@ -33,7 +33,7 @@ class TestCreateInterpolationKnots(TestCase):
         """
         x_values = [0, 1, 2, 3, 4, 5, 6, 7]
         expected_values = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 7, 7]
-        computed_values = create_interpolation_knots(x_values, interpol_type='cubic')
+        computed_values = create_interpolation_knots(x_values, interpol_type="cubic")
 
         for e, c in zip(expected_values, computed_values):
             self.assertAlmostEqual(e, c)

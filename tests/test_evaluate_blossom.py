@@ -16,7 +16,7 @@ class TestEvaluateBlossom(TestCase):
 
         for case in cases:
             mu, x = case
-            x_values = [x]*p
+            x_values = [x] * p
             computed_values = evaluate_blossom(p, t, mu, c, x_values)
             expected_values = f(x)
 
@@ -34,7 +34,7 @@ class TestEvaluateBlossom(TestCase):
             Computing the blossom for all possible permutations of the parameters x
         Then:
             B[f](x) = reference_evaluation
-        :return: 
+        :return:
         """
         import itertools
 
@@ -47,4 +47,6 @@ class TestEvaluateBlossom(TestCase):
         reference_evaluation = evaluate_blossom(p, t, mu, c, x)
         for permutation in itertools.permutations(x):
 
-            self.assertAlmostEqual(reference_evaluation, evaluate_blossom(p, t, mu, c, permutation))
+            self.assertAlmostEqual(
+                reference_evaluation, evaluate_blossom(p, t, mu, c, permutation)
+            )

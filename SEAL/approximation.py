@@ -21,15 +21,17 @@ def variation_diminishing_spline_approximation(f, p, t):
     return SplineFunction(p, t, vdsa_coefficients)
 
 
-def least_squares_spline_approximation(parameter_values, data_values, spline_space, weights=None):
+def least_squares_spline_approximation(
+    parameter_values, data_values, spline_space, weights=None
+):
     """
     Given a set of m data points (x_i, y_i), and a SplineSpace S,
-    compute the weighted least squares spline approximation to the data. 
+    compute the weighted least squares spline approximation to the data.
     :type spline_space: SplineSpace
     :param parameter_values: np.ndarray, shape (m, 2)
     :param data_values: np.ndarray, shape (m, 2)
     :param spline_space: SplineSpace object
-    :param weights: Optional. np.ndarray, shape (m, 1), 
+    :param weights: Optional. np.ndarray, shape (m, 1),
     :return: SplineFunction, the least squares spline approximation
     """
     m = len(parameter_values)
@@ -55,14 +57,18 @@ def least_squares_spline_approximation(parameter_values, data_values, spline_spa
 
     coefficients = []
     for i in range(dim):
-        component = np.linalg.solve(A[:, :, i].T.dot(A[:, :, i]), A[:, :, i].T.dot(b[:, i]))
+        component = np.linalg.solve(
+            A[:, :, i].T.dot(A[:, :, i]), A[:, :, i].T.dot(b[:, i])
+        )
         coefficients.append(component)
 
     coefficients = np.column_stack(coefficients)
     return spline_space(coefficients)
 
 
-def least_squares_tensor_approximation(parameter_values, data_values, spline_space, weights=None):
+def least_squares_tensor_approximation(
+    parameter_values, data_values, spline_space, weights=None
+):
     """
     Given a set of gridded data
     :param parameter_values: two arrays of length (m1,) and (m2,) respectively
