@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "SEAL"
-version = "0.1.0"
+version = "1.0.0"
 description = "A spline library written in Python"
 authors = ["Ivar Stangeby"]
 license = "MIT"
+packages = [
+    { include = "SEAL" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
